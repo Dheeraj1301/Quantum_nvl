@@ -1,7 +1,7 @@
 # Auto-generated stub
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from modules.q_routing import optimize_routing, classical_route, simulate_token_stream
+from quantumflow_ai.modules.q_routing import optimize_routing, classical_route, simulate_token_stream
 
 app = FastAPI()
 

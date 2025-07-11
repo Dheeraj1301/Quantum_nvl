@@ -1,5 +1,6 @@
 # Auto-generated stub
-from pydantic import BaseSettings
+# core/config.py
+from pydantic_settings import BaseSettings  # ✅ NEW
 
 class Settings(BaseSettings):
     quantum_backend: str = "default.qubit"

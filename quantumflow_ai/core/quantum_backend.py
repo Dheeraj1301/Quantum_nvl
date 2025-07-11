@@ -1,6 +1,6 @@
 # Auto-generated stub
 from pennylane import device
-from core.config import settings
+from quantumflow_ai.core.config import settings
 
 def get_quantum_device():
     if settings.use_gpu:
