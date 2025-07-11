@@ -1,0 +1,5 @@
+# qml-requirements.txt
+pennylane-lightning[gpu]==0.37.0
+qiskit==1.0.2
+# braket-sdk==1.64.0
+# braket-pennylane-plugin==1.15.0
