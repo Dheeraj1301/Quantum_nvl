@@ -1,35 +1,87 @@
-"""Simplified QAOA-based router used for testing.
+"""QAOA-based routing module with fallback for non-quantum environments.
 
-This module originally relied on the ``pennylane`` quantum computing
-library. To keep the test environment lightweight and self contained we
-provide a very small stand-in implementation that mimics the expected
-behaviour without any external dependencies.
+Uses Pennylane for quantum optimization when available.
+Falls back to dummy random optimizer if quantum backend not installed.
 """
-from __future__ import annotations
 
+from __future__ import annotations
 import random
+import math
 from typing import Any, Dict, List
 
-from quantumflow_ai.core.logger import get_logger
+try:
+    import pennylane as qml
+    from pennylane import numpy as np
+    from quantumflow_ai.core.quantum_backend import get_quantum_device
+    PENNYLANE_AVAILABLE = True
+except ImportError:
+    qml = None
+    np = None
+    get_quantum_device = None
+    PENNYLANE_AVAILABLE = False
 
+from quantumflow_ai.core.logger import get_logger
 logger = get_logger("QAOARouter")
+
+# Setup wires
+if PENNYLANE_AVAILABLE:
+    dev = get_quantum_device()
+    n_wires = len(dev.wires)
+else:
+    dev = None
+    n_wires = 4  # fallback size
+
+
+# Quantum circuit definition (only if Pennylane is available)
+if PENNYLANE_AVAILABLE:
+    def qaoa_ansatz(params):
+        for i in range(n_wires):
+            qml.Hadamard(wires=i)
+        for i in range(len(params) // 2):
+            for j in range(n_wires - 1):
+                qml.CNOT(wires=[j, j + 1])
+                qml.RZ(params[i], wires=j + 1)
+                qml.CNOT(wires=[j, j + 1])
+            for j in range(n_wires):
+                qml.RX(params[i + n_wires], wires=j)
+
+    @qml.qnode(dev)
+    def cost_fn(params):
+        qaoa_ansatz(params)
+        return qml.expval(qml.PauliZ(0))
+else:
+    def cost_fn(params):
+        return random.random()
 
 
 def optimize_routing(model_graph: Dict[str, Any], token_stream: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Return a dummy routing optimisation result.
+    """Optimize token-to-expert routing using QAOA or fallback.
 
-    The function generates a pseudo "routing_score" and a list of
-    ``optimized_params`` whose length depends on the number of experts in
-    the ``model_graph``.  This keeps the interface compatible with a
-    potential real implementation while avoiding heavy quantum
-    dependencies.
+    Args:
+        model_graph (dict): Graph structure containing expert nodes.
+        token_stream (list): List of token identifiers to be routed.
+
+    Returns:
+        dict: Routing score and optimized parameters.
     """
-    logger.info("Starting simplified QAOA optimisation")
+    logger.info("Starting QAOA routing optimization")
+    n_experts = len(model_graph.get("experts", [])) or n_wires
 
-    n_experts = len(model_graph.get("experts", []))
-    optimized_params = [random.random() for _ in range(max(1, n_experts * 2))]
+    if np:
+        init_params = np.random.uniform(0, math.pi, n_wires * 2)
+    else:
+        init_params = [random.uniform(0, math.pi) for _ in range(n_wires * 2)]
+
+    if PENNYLANE_AVAILABLE:
+        opt = qml.GradientDescentOptimizer(stepsize=0.4)
+        for i in range(20):
+            init_params = opt.step(cost_fn, init_params)
+            logger.debug(f"Step {i} | Cost: {cost_fn(init_params)}")
+        score = float(cost_fn(init_params))
+    else:
+        score = random.random()
 
     return {
-        "routing_score": random.random(),
-        "optimized_params": optimized_params,
+        "routing_score": score,
+        "optimized_params": list(init_params)
     }
