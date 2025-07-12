@@ -1,8 +1,8 @@
 # Auto-generated stub
-import pandas as pd
 import os
 
 def load_routing_data(file_path="data/routing_data.csv"):
+    import pandas as pd
     if not os.path.exists(file_path):
         raise FileNotFoundError("Synthetic data not found. Please run routing_synthetic.py first.")
     df = pd.read_csv(file_path)
