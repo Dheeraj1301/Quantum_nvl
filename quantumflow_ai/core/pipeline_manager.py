@@ -1,5 +1,5 @@
 # Auto-generated stub
-from core.logger import get_logger
+from .logger import get_logger
 from typing import Callable, Dict
 
 class PipelineManager:
