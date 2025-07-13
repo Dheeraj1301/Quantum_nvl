@@ -1,16 +1,21 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+# Ensure the repository root is on the path so imports using the
+# ``quantumflow_ai`` package work when this script is executed directly
+# from within the ``notebooks`` directory or from an external location.
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, REPO_ROOT)
 
 import pandas as pd
 
-# ensure project root is in path
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-sys.path.insert(0, project_root)
+# Directory containing project data files (relative to the repository root)
+project_root = REPO_ROOT
 
-from modules.q_routing import optimize_routing, classical_route
-from modules.q_routing.simulator import load_routing_data
+# Use fully-qualified package imports so the script works when run
+# outside the repository root.
+from quantumflow_ai.modules.q_routing import optimize_routing, classical_route
+from quantumflow_ai.modules.q_routing.simulator import load_routing_data
 
 
 def evaluate_classical_router(df):
