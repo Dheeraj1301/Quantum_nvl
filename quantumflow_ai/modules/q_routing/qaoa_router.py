@@ -5,8 +5,8 @@ Falls back to dummy random optimizer if quantum backend not installed.
 """
 
 from __future__ import annotations
-import random
 import math
+import random
 from typing import Any, Dict, List
 
 try:
@@ -23,6 +23,17 @@ except ImportError:
 
 from quantumflow_ai.core.logger import get_logger
 
+
+def _fallback_score(token_stream: List[dict], num_experts: int) -> float:
+    """Return a deterministic fallback score based on the token stream."""
+    if num_experts <= 0 or not token_stream:
+        return 0.0
+    total = sum(t.get("token_id", 0) % num_experts for t in token_stream)
+    max_total = (num_experts - 1) * len(token_stream)
+    if max_total == 0:
+        return 0.0
+    return total / max_total
+
 logger = get_logger("QAOARouter")
 
 def optimize_routing(model_graph, token_stream):
@@ -35,18 +46,21 @@ def optimize_routing(model_graph, token_stream):
     experts = model_graph.get("experts", [])
     if not isinstance(experts, list) or len(experts) == 0:
         logger.error("Invalid expert count; using fallback router")
-        return {"routing_score": random.random(), "optimized_params": []}
+        score = _fallback_score(token_stream, len(experts))
+        return {"routing_score": score, "optimized_params": []}
 
     if not PENNYLANE_AVAILABLE:
-        logger.warning("Pennylane not installed; using random routing score")
-        return {"routing_score": random.random(), "optimized_params": []}
+        logger.warning("Pennylane not installed; using deterministic fallback score")
+        score = _fallback_score(token_stream, len(experts))
+        return {"routing_score": score, "optimized_params": []}
 
     n_wires = len(experts)
     try:
         dev = get_quantum_device(wires=n_wires)
     except Exception as exc:
         logger.error(f"Quantum backend not available: {exc}; using fallback")
-        return {"routing_score": random.random(), "optimized_params": []}
+        score = _fallback_score(token_stream, len(experts))
+        return {"routing_score": score, "optimized_params": []}
 
     def qaoa_ansatz(params):
         for i in range(n_wires):
