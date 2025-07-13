@@ -1,0 +1,73 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8f9fa;
+  margin: 0;
+  padding: 2rem;
+  color: #333;
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+}
+
+h1, h3, h4 {
+  margin-top: 0;
+  color: #222;
+}
+
+label {
+  font-weight: 600;
+  margin-top: 1rem;
+  display: block;
+}
+
+input[type="text"], button {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.4rem 0 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+button {
+  background: #28a745;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border: none;
+}
+
+button:hover {
+  background: #218838;
+}
+
+.output-box {
+  margin-top: 1.5rem;
+  background: #f1f1f1;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+#heatmap-container {
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+canvas#heatmapCanvas {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0,0,0,0.05);
+}
