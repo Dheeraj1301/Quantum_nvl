@@ -5,8 +5,8 @@ Falls back to dummy random optimizer if quantum backend not installed.
 """
 
 from __future__ import annotations
-import random
 import math
+import random
 from typing import Any, Dict, List
 
 try:
@@ -20,81 +20,54 @@ except ImportError:
     get_quantum_device = None
     PENNYLANE_AVAILABLE = False
 
+
 from quantumflow_ai.core.logger import get_logger
+
+
+def _fallback_score(token_stream: List[dict], num_experts: int) -> float:
+    """Return a deterministic fallback score based on the token stream."""
+    if num_experts <= 0 or not token_stream:
+        return 0.0
+    total = sum(t.get("token_id", 0) % num_experts for t in token_stream)
+    max_total = (num_experts - 1) * len(token_stream)
+    if max_total == 0:
+        return 0.0
+    return total / max_total
+
 logger = get_logger("QAOARouter")
 
-# ================================
-# Cost Hamiltonian Construction
-# ================================
 if PENNYLANE_AVAILABLE:
-    def build_cost_hamiltonian(num_wires: int):
-        """Simple cost: encourage load balancing across experts."""
-        coeffs = [1.0] * num_wires
-        observables = [qml.PauliZ(i) for i in range(num_wires)]
-        return qml.Hamiltonian(coeffs, observables)
+    dev = get_quantum_device()
+    n_wires = len(dev.wires)
+else:
+    dev = None
+    n_wires = 0
 
-    def qaoa_ansatz(params, wires):
-        """Basic layered QAOA ansatz."""
-        for i in wires:
+if PENNYLANE_AVAILABLE:
+    def qaoa_ansatz(params):
+        for i in range(n_wires):
             qml.Hadamard(wires=i)
+        for i in range(len(params)//2):
+            for j in range(n_wires - 1):
+                qml.CNOT(wires=[j, j+1])
+                qml.RZ(params[i], wires=j+1)
+                qml.CNOT(wires=[j, j+1])
+            for j in range(n_wires):
+                qml.RX(params[i + n_wires], wires=j)
 
-        p = len(params) // (2 * len(wires))
-        for layer in range(p):
-            gamma_idx = layer * len(wires)
-            beta_idx = gamma_idx + len(wires)
-            for i in range(len(wires) - 1):
-                qml.CNOT(wires=[wires[i], wires[i+1]])
-                qml.RZ(params[gamma_idx + i], wires=wires[i+1])
-                qml.CNOT(wires=[wires[i], wires[i+1]])
-            for i in range(len(wires)):
-                qml.RX(params[beta_idx + i], wires=i)
+    @qml.qnode(dev)
+    def cost_fn(params):
+        qaoa_ansatz(params)
+        return qml.expval(qml.PauliZ(0))
 
-# ================================
-# Main Routing Function
-# ================================
-def optimize_routing(model_graph: Dict[str, Any], token_stream: List[Dict[str, Any]], use_deterministic=False) -> Dict[str, Any]:
+def optimize_routing(model_graph, token_stream):
     """Optimize routing using QAOA if PennyLane is available.
 
     Falls back to a random score when no quantum backend is installed.
     """
-    num_experts = len(model_graph.get("experts", []))
-
-    if not PENNYLANE_AVAILABLE or num_experts == 0:
-        logger.warning("Quantum backend not available or invalid expert count. Fallback mode.")
-        return {
-            "routing_score": round(random.random(), 4),
-            "optimized_params": [],
-            "assignments": [
-                {"token_id": t["token_id"], "expert": t["token_id"] % max(1, num_experts)}
-                for t in token_stream
-            ],
-            "mode": "fallback"
-        }
-
-    n_wires = num_experts
-    wires = list(range(n_wires))
-    cost_h = build_cost_hamiltonian(n_wires)
-
-    dev = get_quantum_device(wires=n_wires)
-    if not dev:
-        logger.warning("Failed to acquire quantum device. Falling back.")
-        return {
-            "routing_score": round(random.random(), 4),
-            "optimized_params": [],
-            "assignments": [
-                {"token_id": t["token_id"], "expert": t["token_id"] % n_wires}
-                for t in token_stream
-            ],
-            "mode": "fallback"
-        }
-
-    if use_deterministic and np:
-        np.random.seed(1234)
-
-    @qml.qnode(dev)
-    def cost_fn(params):
-        qaoa_ansatz(params, wires)
-        return qml.expval(cost_h)
+    if not PENNYLANE_AVAILABLE:
+        logger.warning("Pennylane not installed; using random routing score")
+        return {"routing_score": random.random(), "optimized_params": []}
 
     logger.info("Starting QAOA optimization")
     p_layers = 2
