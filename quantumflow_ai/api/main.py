@@ -12,6 +12,10 @@ class RoutingInput(BaseModel):
     token_stream: List[dict]
     use_quantum: bool = True
 
+@app.get("/")
+def root():
+    return {"message": "Quantum Routing API is running. Use POST /q-routing or /q-routing/file-upload for routing."}
+
 @app.post("/q-routing")
 def route_tokens(data: RoutingInput):
     try:

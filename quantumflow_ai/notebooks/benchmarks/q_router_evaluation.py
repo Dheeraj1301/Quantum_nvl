@@ -1,13 +1,16 @@
 import os
 import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 import pandas as pd
 
 # ensure project root is in path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, project_root)
 
-from quantumflow_ai.modules.q_routing import optimize_routing, classical_route
-from quantumflow_ai.modules.q_routing.simulator import load_routing_data
+from modules.q_routing import optimize_routing, classical_route
+from modules.q_routing.simulator import load_routing_data
 
 
 def evaluate_classical_router(df):
