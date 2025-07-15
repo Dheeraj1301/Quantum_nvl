@@ -58,16 +58,3 @@ button:hover {
   white-space: pre-wrap;
 }
 
-#heatmap-container {
-  margin-top: 2rem;
-  padding: 1rem 0;
-}
-
-canvas#heatmapCanvas {
-  width: 100%;
-  max-width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 0 4px rgba(0,0,0,0.05);
-}

@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "chart.js": "^4.5.0",
-    "chartjs-chart-matrix": "^3.0.0"
-  }
-}
