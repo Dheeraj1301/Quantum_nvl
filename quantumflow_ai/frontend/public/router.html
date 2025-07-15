@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QuantumFlow Routing</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🚦 Quantum Routing UI</h1>
+
+    <form id="routingForm">
+      <label for="experts">Expert IDs (comma-separated):</label>
+      <input type="text" id="experts" placeholder="0,1,2" required />
+
+      <label for="tokens">Token IDs (comma-separated):</label>
+      <input type="text" id="tokens" placeholder="0,1,2,3" required />
+
+      <label><input type="checkbox" id="useQuantum" checked /> Use Quantum Routing</label>
+
+      <button type="submit">Run Routing</button>
+    </form>
+
+    <form id="fileForm">
+      <label for="csvFile">Upload CSV File:</label>
+      <input type="file" id="csvFile" accept=".csv" required />
+      <label><input type="checkbox" id="useQuantumFile" checked /> Use Quantum Routing</label>
+      <button type="submit">Upload & Route</button>
+    </form>
+
+    <div id="output" class="output-box"></div>
+    <a href="index.html">⬅️ Back to module selection</a>
+  </div>
+  <script src="router.js"></script>
+</body>
+</html>

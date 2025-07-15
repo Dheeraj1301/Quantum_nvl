@@ -1,1 +1,30 @@
 # Auto-generated stub
+# tests/test_energy.py
+
+from modules.q_energy.qbm_scheduler import qbm_schedule
+from modules.q_energy.classical_scheduler import classical_schedule
+from modules.q_energy.scheduler_utils import normalize_energy_profile
+
+def mock_job_graph():
+    return {
+        "jobs": {
+            "A": [], 
+            "B": ["A"], 
+            "C": ["A"]
+        }
+    }
+
+def mock_energy_profile():
+    return {"A": 10.0, "B": 7.5, "C": 5.0}
+
+def test_qbm_scheduler():
+    graph = mock_job_graph()
+    profile = normalize_energy_profile(mock_energy_profile())
+    result = qbm_schedule(graph, profile)
+    assert all(job in result for job in graph["jobs"])
+
+def test_classical_scheduler():
+    graph = mock_job_graph()
+    profile = normalize_energy_profile(mock_energy_profile())
+    result = classical_schedule(graph, profile)
+    assert all(job in result for job in graph["jobs"])

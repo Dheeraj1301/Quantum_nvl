@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QuantumFlow Energy Scheduler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>⚡ Q-Energy Scheduler</h1>
+    <form id="energyForm">
+      <label>Job Graph (JSON):</label>
+      <textarea id="jobGraph" rows="6">{
+  "jobs": {
+    "A": [],
+    "B": ["A"],
+    "C": ["A"]
+  }
+}</textarea>
+      <label>Energy Profile (JSON):</label>
+      <textarea id="energyProfile" rows="4">{
+  "A": 10.0,
+  "B": 8.0,
+  "C": 6.0
+}</textarea>
+      <label><input type="checkbox" id="useQuantum" checked /> Use Quantum</label>
+      <label><input type="checkbox" id="useML" checked /> Use ML Rescheduler</label>
+      <label><input type="checkbox" id="useHybrid" checked /> Use Hybrid Optimizer</label>
+      <button type="submit">Schedule Jobs</button>
+    </form>
+    <div id="energyOutput" class="output-box"></div>
+    <a href="index.html">⬅️ Back to module selection</a>
+  </div>
+  <script src="energy.js"></script>
+</body>
+</html>

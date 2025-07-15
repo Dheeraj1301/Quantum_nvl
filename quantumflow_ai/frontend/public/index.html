@@ -1,52 +1,18 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QuantumFlow Routing UI</title>
-
-  <link rel="stylesheet" href="styles.css" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuantumFlow - Module Select</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>QuantumFlow Routing UI</h1>
-
-    <!-- Routing Input Form -->
-    <form id="routingForm">
-      <label for="experts">Model Graph (comma-separated expert IDs):</label>
-      <input type="text" id="experts" placeholder="e.g. 0,1,2,3" required />
-
-      <label for="tokens">Token Stream (comma-separated token IDs):</label>
-      <input type="text" id="tokens" placeholder="e.g. 0,1,2,3,4" required />
-
-      <label for="useQuantum">
-        <input type="checkbox" id="useQuantum" checked />
-        Use Quantum Routing?
-      </label>
-
-      <button type="submit">Route</button>
-    </form>
-
-    <!-- CSV Upload Form -->
-    <form id="fileForm">
-      <label for="csvFile">Upload CSV File:</label>
-      <input type="file" id="csvFile" accept=".csv" required />
-
-      <label for="useQuantumFile">
-        <input type="checkbox" id="useQuantumFile" checked />
-        Use Quantum Routing?
-      </label>
-
-      <button type="submit">Upload &amp; Route</button>
-    </form>
-
-    <!-- Routing Output Box -->
-    <div id="output" class="output-box"></div>
-
+  <div class="container center">
+    <h1>🧠 QuantumFlow AI Dashboard</h1>
+    <p>Select a module to begin:</p>
+    <div class="button-row">
+      <button onclick="location.href='router.html'">🚦 Q-Routing</button>
+      <button onclick="location.href='energy.html'">⚡ Q-Energy</button>
+    </div>
   </div>
-
-  <!-- Routing Logic -->
-  <script src="app.js"></script>
 </body>
 </html>
