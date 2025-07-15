@@ -1,10 +1,10 @@
-// ✅ Register matrix chart plugin if available; otherwise fallback
+// ✅ Register matrix chart plugin if available
 function matrixPluginLoaded() {
   const registry = Chart.registry && Chart.registry.controllers;
   return (
-    (registry &&
-      (registry.has?.("matrix") ||
-        (typeof registry.get === "function" && registry.get("matrix")))) ||
+    registry &&
+    (registry.has?.("matrix") ||
+      (typeof registry.get === "function" && registry.get("matrix"))) ||
     false
   );
 }
@@ -32,6 +32,7 @@ if (!matrixPluginLoaded()) {
   }
 }
 
+// 🧠 Listen for routing form submit
 document.getElementById("routingForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -62,7 +63,6 @@ document.getElementById("routingForm").addEventListener("submit", function (e) {
       `;
 
       const assignments = data.results.assignments || data.results;
-
       if (!Array.isArray(assignments)) {
         outputDiv.innerHTML += `<p style="color:red;">No routing assignments found to plot.</p>`;
         return;
@@ -76,6 +76,7 @@ document.getElementById("routingForm").addEventListener("submit", function (e) {
     });
 });
 
+// 🔥 Render Matrix Heatmap (if plugin available) or fallback to raw canvas grid
 function renderHeatmap(assignments, numExperts) {
   const tokens = assignments.map(a => a.token_id);
   const expertLoads = Array.from({ length: tokens.length }, (_, i) =>
@@ -89,16 +90,14 @@ function renderHeatmap(assignments, numExperts) {
   });
 
   const flatData = expertLoads.flat();
-
   const canvas = document.getElementById("heatmapCanvas");
   const ctx = canvas.getContext("2d");
 
-  // ✅ Destroy previous chart instance if it exists
   if (window.routingHeatmap && typeof window.routingHeatmap.destroy === "function") {
     window.routingHeatmap.destroy();
   }
+
   if (matrixPluginLoaded()) {
-    // ✅ Create matrix heatmap using plugin
     window.routingHeatmap = new Chart(ctx, {
       type: "matrix",
       data: {
@@ -122,19 +121,13 @@ function renderHeatmap(assignments, numExperts) {
           }
         },
         scales: {
-          x: {
-            title: { display: true, text: "Expert ID" },
-            ticks: { stepSize: 1 }
-          },
-          y: {
-            title: { display: true, text: "Token ID" },
-            ticks: { stepSize: 1 }
-          }
+          x: { title: { display: true, text: "Expert ID" }, ticks: { stepSize: 1 } },
+          y: { title: { display: true, text: "Token ID" }, ticks: { stepSize: 1 } }
         }
       }
     });
   } else {
-    // ❌ Plugin missing - draw simple grid on canvas
+    // 🧱 Fallback: draw manually
     const cell = 18;
     canvas.width = numExperts * cell;
     canvas.height = tokens.length * cell;
@@ -161,12 +154,10 @@ function renderHeatmap(assignments, numExperts) {
   }
 }
 
+// 📊 Print analysis summary
 function analyzeRouting(assignments, numExperts) {
   const expertCount = Array(numExperts).fill(0);
-
-  assignments.forEach(a => {
-    expertCount[a.expert]++;
-  });
+  assignments.forEach(a => expertCount[a.expert]++);
 
   const maxLoad = Math.max(...expertCount);
   const minLoad = Math.min(...expertCount);

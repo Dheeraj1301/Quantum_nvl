@@ -60,14 +60,39 @@ if PENNYLANE_AVAILABLE:
         qaoa_ansatz(params)
         return qml.expval(qml.PauliZ(0))
 
-def optimize_routing(model_graph, token_stream):
+def optimize_routing(model_graph: Dict[str, Any], token_stream: List[Dict[str, Any]], use_deterministic=False) -> Dict[str, Any]:
     """Optimize routing using QAOA if PennyLane is available.
 
-    Falls back to a random score when no quantum backend is installed.
+    Falls back to deterministic offline scoring when quantum backend is unavailable.
     """
-    if not PENNYLANE_AVAILABLE:
-        logger.warning("Pennylane not installed; using random routing score")
-        return {"routing_score": random.random(), "optimized_params": []}
+
+    # ✅ Always define num_experts first
+    num_experts = len(model_graph.get("experts", []))
+
+    if not PENNYLANE_AVAILABLE or num_experts == 0:
+        logger.warning("Quantum backend not available or invalid expert count. Using deterministic fallback score.")
+
+        # ✅ Simple load balancing estimate
+        expert_loads = [0] * num_experts
+        for t in token_stream:
+            expert_index = t["token_id"] % num_experts
+            expert_loads[expert_index] += 1
+
+        mean_load = sum(expert_loads) / num_experts
+        variance = sum((x - mean_load) ** 2 for x in expert_loads) / num_experts
+        std_dev = variance ** 0.5
+
+        max_std = mean_load if mean_load > 0 else 1.0  # avoid divide-by-zero
+        normalized_score = max(0.0, 1 - std_dev / max_std)
+
+        return {
+            "routing_score": round(normalized_score, 4),
+            "optimized_params": [],
+            "mode": "fallback"
+        }
+
+    # ✅ rest of your quantum QAOA logic continues here...
+
 
     logger.info("Starting QAOA optimization")
     p_layers = 2
