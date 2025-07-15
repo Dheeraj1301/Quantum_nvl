@@ -2,6 +2,14 @@ import json
 from collections import deque
 from datetime import datetime
 import os
+from typing import List
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except Exception:  # pragma: no cover - optional dependency
+    np = None
+    NUMPY_AVAILABLE = False
 
 LOG_PATH = "routing_log.json"
 routing_log = deque(maxlen=10)
@@ -18,10 +26,23 @@ def get_last_logs():
     with open(LOG_PATH, "r") as f:
         return json.load(f)
 
-def prepare_lstm_input(logs):
-    vecs = []
-    for log in logs:
-        method_code = 1 if log["method"] == "qaoa" else 0
-        input_vec = [method_code] + list(map(float, log["input_matrix"].get("experts", [])))
-        vecs.append(input_vec)
-    return np.expand_dims(np.array(vecs), axis=0)  # shape: (1, 10, input_dim)
+def prepare_lstm_input(logs: List[dict]):
+    """Return 3D numpy array suitable for LSTM training or inference."""
+
+    feature_vecs: List[List[float]] = []
+    for log in logs[-10:]:
+        method_code = 1.0 if log.get("method") == "qaoa" else 0.0
+        num_experts = float(len(log.get("input_matrix", {}).get("experts", [])))
+        token_count = float(log.get("token_count", len(log.get("output_matrix", []))))
+        energy = float(log.get("energy", 0.0))
+
+        feature_vecs.append([method_code, num_experts, token_count, energy])
+
+    if not NUMPY_AVAILABLE:
+        return []
+
+    if not feature_vecs:
+        return np.empty((1, 0, 4))
+
+    arr = np.array(feature_vecs, dtype=float)
+    return np.expand_dims(arr, axis=0)
