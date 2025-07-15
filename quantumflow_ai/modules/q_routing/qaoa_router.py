@@ -22,6 +22,7 @@ except ImportError:
 
 
 from quantumflow_ai.core.logger import get_logger
+from quantumflow_ai.modules.routing_advisor import record_routing_run
 
 
 def _fallback_score(token_stream: List[dict], num_experts: int) -> float:
@@ -70,26 +71,41 @@ def optimize_routing(model_graph: Dict[str, Any], token_stream: List[Dict[str, A
     num_experts = len(model_graph.get("experts", []))
 
     if not PENNYLANE_AVAILABLE or num_experts == 0:
-        logger.warning("Quantum backend not available or invalid expert count. Using deterministic fallback score.")
+        logger.warning(
+            "Quantum backend not available or invalid expert count. Using deterministic fallback score."
+        )
 
-        # ✅ Simple load balancing estimate
         expert_loads = [0] * num_experts
         for t in token_stream:
             expert_index = t["token_id"] % num_experts
             expert_loads[expert_index] += 1
 
-        mean_load = sum(expert_loads) / num_experts
-        variance = sum((x - mean_load) ** 2 for x in expert_loads) / num_experts
+        mean_load = sum(expert_loads) / num_experts if num_experts else 0
+        variance = (
+            sum((x - mean_load) ** 2 for x in expert_loads) / num_experts
+            if num_experts
+            else 0
+        )
         std_dev = variance ** 0.5
 
-        max_std = mean_load if mean_load > 0 else 1.0  # avoid divide-by-zero
+        max_std = mean_load if mean_load > 0 else 1.0
         normalized_score = max(0.0, 1 - std_dev / max_std)
 
-        return {
+        assignments = [
+            {"token_id": t["token_id"], "expert": t["token_id"] % max(num_experts, 1)}
+            for t in token_stream
+        ]
+
+        result = {
             "routing_score": round(normalized_score, 4),
             "optimized_params": [],
-            "mode": "fallback"
+            "assignments": assignments,
+            "mode": "fallback",
         }
+
+        record_routing_run(model_graph, token_stream, result, use_quantum=False)
+
+        return result
 
     # ✅ rest of your quantum QAOA logic continues here...
 
@@ -119,9 +135,13 @@ def optimize_routing(model_graph: Dict[str, Any], token_stream: List[Dict[str, A
         for i, t in enumerate(token_stream)
     ]
 
-    return {
+    result = {
         "routing_score": round(score, 4),
         "optimized_params": init_params.tolist(),
         "assignments": assignments,
-        "mode": "quantum"
+        "mode": "quantum",
     }
+
+    record_routing_run(model_graph, token_stream, result, use_quantum=True)
+
+    return result
