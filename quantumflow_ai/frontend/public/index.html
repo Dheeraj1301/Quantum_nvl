@@ -28,6 +28,19 @@
       <button type="submit">Route</button>
     </form>
 
+    <!-- CSV Upload Form -->
+    <form id="fileForm">
+      <label for="csvFile">Upload CSV File:</label>
+      <input type="file" id="csvFile" accept=".csv" required />
+
+      <label for="useQuantumFile">
+        <input type="checkbox" id="useQuantumFile" checked />
+        Use Quantum Routing?
+      </label>
+
+      <button type="submit">Upload &amp; Route</button>
+    </form>
+
     <!-- Routing Output Box -->
     <div id="output" class="output-box"></div>
 

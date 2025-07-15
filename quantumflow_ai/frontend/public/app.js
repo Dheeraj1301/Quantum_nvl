@@ -79,6 +79,53 @@ document.getElementById("routingForm").addEventListener("submit", function (e) {
     });
 });
 
+// 📂 Handle CSV file upload
+document.getElementById("fileForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const fileInput = document.getElementById("csvFile");
+  const useQuantum = document.getElementById("useQuantumFile").checked;
+
+  if (!fileInput.files.length) {
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", fileInput.files[0]);
+  formData.append("use_quantum", useQuantum);
+
+  fetch("/q-routing/file-upload", {
+    method: "POST",
+    body: formData
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Routing failed.");
+      return res.json();
+    })
+    .then(data => {
+      const outputDiv = document.getElementById("output");
+      outputDiv.innerHTML = `
+        <h3>Routing Results</h3>
+        <p><strong>Status:</strong> ${data.status}</p>
+        <p><strong>Mode:</strong> ${data.mode}</p>
+        <p><strong>Routing Score:</strong> ${data.routing_score}</p>
+        <pre><strong>Params:</strong> ${JSON.stringify(data.optimized_params, null, 2)}</pre>
+      `;
+
+      const assignments = data.results.assignments || data.results;
+      if (!Array.isArray(assignments)) {
+        outputDiv.innerHTML += `<p style="color:red;">No routing assignments found to plot.</p>`;
+        return;
+      }
+
+      const expertCount = assignments.reduce((m, a) => Math.max(m, a.expert), -1) + 1;
+      analyzeRouting(assignments, expertCount);
+    })
+    .catch(err => {
+      document.getElementById("output").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+    });
+});
+
 
 // 📊 Print analysis summary
 function analyzeRouting(assignments, numExperts) {
