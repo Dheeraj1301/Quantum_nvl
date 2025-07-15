@@ -1,8 +1,14 @@
-// ✅ Register Matrix chart when using CDN
-Chart.register(
-  window.chartjsChartMatrix.MatrixController,
-  window.chartjsChartMatrix.MatrixElement
-);
+// ✅ Register matrix chart plugin if available; otherwise fallback
+if (window.chartjsChartMatrix && window.chartjsChartMatrix.MatrixController) {
+  Chart.register(
+    window.chartjsChartMatrix.MatrixController,
+    window.chartjsChartMatrix.MatrixElement
+  );
+} else {
+  console.warn(
+    "chartjs-chart-matrix plugin not found; using canvas fallback for heatmap"
+  );
+}
 
 document.getElementById("routingForm").addEventListener("submit", function (e) {
   e.preventDefault();
@@ -69,42 +75,68 @@ function renderHeatmap(assignments, numExperts) {
   if (window.routingHeatmap && typeof window.routingHeatmap.destroy === "function") {
     window.routingHeatmap.destroy();
   }
-
-  // ✅ Create new matrix heatmap
-  window.routingHeatmap = new Chart(ctx, {
-    type: "matrix",
-    data: {
-      datasets: [{
-        label: "Token → Expert Assignment",
-        data: flatData,
-        backgroundColor(ctx) {
-          return ctx.raw.v === 1 ? "rgba(0, 123, 255, 0.8)" : "rgba(230, 230, 230, 0.15)";
+  if (window.chartjsChartMatrix && window.chartjsChartMatrix.MatrixController) {
+    // ✅ Create matrix heatmap using plugin
+    window.routingHeatmap = new Chart(ctx, {
+      type: "matrix",
+      data: {
+        datasets: [{
+          label: "Token → Expert Assignment",
+          data: flatData,
+          backgroundColor(ctx) {
+            return ctx.raw.v === 1 ? "rgba(0, 123, 255, 0.8)" : "rgba(230, 230, 230, 0.15)";
+          },
+          width: () => 18,
+          height: () => 18
+        }]
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: ctx => `Token ${ctx[0].raw.y}`,
+              label: ctx => `Expert ${ctx.raw.x}: ${ctx.raw.v ? "Assigned" : "Not used"}`
+            }
+          }
         },
-        width: () => 18,
-        height: () => 18
-      }]
-    },
-    options: {
-      plugins: {
-        tooltip: {
-          callbacks: {
-            title: ctx => `Token ${ctx[0].raw.y}`,
-            label: ctx => `Expert ${ctx.raw.x}: ${ctx.raw.v ? "Assigned" : "Not used"}`
+        scales: {
+          x: {
+            title: { display: true, text: "Expert ID" },
+            ticks: { stepSize: 1 }
+          },
+          y: {
+            title: { display: true, text: "Token ID" },
+            ticks: { stepSize: 1 }
           }
         }
-      },
-      scales: {
-        x: {
-          title: { display: true, text: "Expert ID" },
-          ticks: { stepSize: 1 }
-        },
-        y: {
-          title: { display: true, text: "Token ID" },
-          ticks: { stepSize: 1 }
-        }
       }
+    });
+  } else {
+    // ❌ Plugin missing - draw simple grid on canvas
+    const cell = 18;
+    canvas.width = numExperts * cell;
+    canvas.height = tokens.length * cell;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#ddd";
+    for (let i = 0; i <= numExperts; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * cell, 0);
+      ctx.lineTo(i * cell, canvas.height);
+      ctx.stroke();
     }
-  });
+    for (let j = 0; j <= tokens.length; j++) {
+      ctx.beginPath();
+      ctx.moveTo(0, j * cell);
+      ctx.lineTo(canvas.width, j * cell);
+      ctx.stroke();
+    }
+    flatData.forEach(d => {
+      if (d.v === 1) {
+        ctx.fillStyle = "rgba(0, 123, 255, 0.8)";
+        ctx.fillRect(d.x * cell, d.y * cell, cell, cell);
+      }
+    });
+  }
 }
 
 function analyzeRouting(assignments, numExperts) {
