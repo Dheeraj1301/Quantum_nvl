@@ -1,9 +1,9 @@
 # hybrid_scheduler.py
 
-from modules.q_energy.qbm_scheduler import qbm_schedule
-from modules.q_energy.classical_scheduler import classical_schedule
-from modules.q_energy.ml_scheduler_predictor import MLEnergyPredictor
-from modules.q_energy.scheduler_utils import normalize_energy_profile
+from quantumflow_ai.modules.q_energy.qbm_scheduler import qbm_schedule
+from quantumflow_ai.modules.q_energy.classical_scheduler import classical_schedule
+from quantumflow_ai.modules.q_energy.ml_scheduler_predictor import MLEnergyPredictor
+from quantumflow_ai.modules.q_energy.scheduler_utils import normalize_energy_profile
 
 def hybrid_schedule(job_graph, energy_profile):
     normalized_energy = normalize_energy_profile(energy_profile)

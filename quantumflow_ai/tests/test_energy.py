@@ -1,9 +1,9 @@
 # Auto-generated stub
 # tests/test_energy.py
 
-from modules.q_energy.qbm_scheduler import qbm_schedule
-from modules.q_energy.classical_scheduler import classical_schedule
-from modules.q_energy.scheduler_utils import normalize_energy_profile
+from quantumflow_ai.modules.q_energy.qbm_scheduler import qbm_schedule
+from quantumflow_ai.modules.q_energy.classical_scheduler import classical_schedule
+from quantumflow_ai.modules.q_energy.scheduler_utils import normalize_energy_profile
 
 def mock_job_graph():
     return {
