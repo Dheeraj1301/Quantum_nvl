@@ -1,3 +1,41 @@
+// ⚙️ Optional matrix heatmap support
+function matrixPluginLoaded() {
+  if (typeof Chart === "undefined") return false;
+  const registry = Chart.registry && Chart.registry.controllers;
+  return (
+    registry &&
+    (registry.has?.("matrix") ||
+      (typeof registry.get === "function" && registry.get("matrix")))
+  );
+}
+
+if (typeof Chart !== "undefined") {
+  if (!matrixPluginLoaded()) {
+    if (
+      window.chartjsChartMatrix &&
+      window.chartjsChartMatrix.MatrixController &&
+      window.chartjsChartMatrix.MatrixElement
+    ) {
+      try {
+        Chart.register(
+          window.chartjsChartMatrix.MatrixController,
+          window.chartjsChartMatrix.MatrixElement
+        );
+      } catch (err) {
+        console.warn("Matrix plugin registration failed", err);
+      }
+    }
+
+    if (!matrixPluginLoaded()) {
+      console.warn(
+        "chartjs-chart-matrix plugin not found; using canvas fallback for heatmap"
+      );
+    }
+  }
+} else {
+  console.warn("Chart.js not loaded; heatmap features disabled");
+}
+
 // 🧠 Listen for routing form submit
 document.getElementById("routingForm").addEventListener("submit", function (e) {
   e.preventDefault();
