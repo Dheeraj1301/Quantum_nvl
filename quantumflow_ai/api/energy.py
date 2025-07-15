@@ -2,12 +2,12 @@
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from modules.q_energy.qbm_scheduler import qbm_schedule
-from modules.q_energy.classical_scheduler import classical_schedule
-from modules.q_energy.scheduler_utils import normalize_energy_profile
-from modules.q_energy.ml_scheduler_predictor import MLEnergyPredictor
-from modules.q_energy.qaoa_dependency_scheduler import qaoa_schedule
-from modules.q_energy.hybrid_scheduler import hybrid_schedule
+from quantumflow_ai.modules.q_energy.qbm_scheduler import qbm_schedule
+from quantumflow_ai.modules.q_energy.classical_scheduler import classical_schedule
+from quantumflow_ai.modules.q_energy.scheduler_utils import normalize_energy_profile
+from quantumflow_ai.modules.q_energy.ml_scheduler_predictor import MLEnergyPredictor
+from quantumflow_ai.modules.q_energy.qaoa_dependency_scheduler import qaoa_schedule
+from quantumflow_ai.modules.q_energy.hybrid_scheduler import hybrid_schedule
 
 router = APIRouter()
 

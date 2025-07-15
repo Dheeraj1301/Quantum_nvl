@@ -1,7 +1,7 @@
 # quantumflow_ai/api/q_router.py
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import List
 import pandas as pd
 
@@ -17,6 +17,7 @@ class RoutingInput(BaseModel):
     model_graph: dict
     token_stream: List[dict]
     use_quantum: bool = True
+    model_config = ConfigDict(protected_namespaces=())
 
 @router.post("/q-routing")
 def route_tokens(data: RoutingInput):
