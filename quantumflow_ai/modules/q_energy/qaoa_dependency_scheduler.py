@@ -1,8 +1,8 @@
 # qaoa_dependency_scheduler.py
 
 import networkx as nx
-import numpy as np
 import pennylane as qml
+import pennylane.numpy as np
 from pennylane import qaoa
 from quantumflow_ai.core.quantum_backend import get_quantum_device
 
@@ -20,7 +20,8 @@ def qaoa_schedule(job_graph: dict, p=2):
         qaoa.qaoa_layer(params, cost_h, mixer_h)
         return [qml.expval(qml.PauliZ(i)) for i in range(wires)]
 
-    params = 0.01 * np.random.rand(2, p, requires_grad=True)
+    params = 0.01 * np.random.rand(2, p)
+    params = np.array(params, requires_grad=True)
     opt = qml.AdamOptimizer(0.1)
 
     for _ in range(30):
