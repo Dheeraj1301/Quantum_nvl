@@ -26,7 +26,7 @@ label {
   display: block;
 }
 
-input[type="text"], input[type="file"], button {
+input[type="text"], input[type="file"], textarea, button {
   width: 100%;
   padding: 0.75rem;
   margin: 0.4rem 0 1.2rem;
@@ -56,5 +56,16 @@ button:hover {
   border-radius: 8px;
   font-family: monospace;
   white-space: pre-wrap;
+}
+
+.center {
+  text-align: center;
+}
+
+.button-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
