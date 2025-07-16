@@ -46,6 +46,10 @@ def train_gnn(
             total_loss += loss.item()
         print(f"Epoch {epoch+1}: Loss = {total_loss:.4f}")
 
+    # Ensure the directory for the model output exists. ``torch.save`` will
+    # raise a ``RuntimeError`` if the parent directory is missing. This can
+    # happen when running the training command in a fresh repository checkout.
+    os.makedirs(os.path.dirname(model_out), exist_ok=True)
     torch.save(model.state_dict(), model_out)
     print(f"✅ GNN model saved to {model_out}")
 
