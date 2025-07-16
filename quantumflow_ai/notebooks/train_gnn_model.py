@@ -11,7 +11,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from quantumflow_ai.modules.q_energy.gnn_predictor import GNNPredictor, prepare_graph_data
 
-def train_gnn(profiles=["a100", "h100", "gb200"], data_dir="notebooks/profiles", model_out="modules/q_energy/model/gnn.pt"):
+def train_gnn(
+    profiles=["a100", "h100", "gb200"],
+    data_dir="quantumflow_ai/notebooks/profiles",
+    model_out="modules/q_energy/model/gnn.pt",
+):
     model = GNNPredictor(in_channels=1)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
     loss_fn = torch.nn.MSELoss()

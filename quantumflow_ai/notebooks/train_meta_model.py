@@ -10,7 +10,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from quantumflow_ai.modules.q_energy.meta_scheduler import MetaScheduler
 
-def train_meta_from_profiles(profiles, data_dir="notebooks/profiles"):
+def train_meta_from_profiles(
+    profiles, data_dir="quantumflow_ai/notebooks/profiles"
+):
     all_X, all_y = [], []
 
     for profile in profiles:
