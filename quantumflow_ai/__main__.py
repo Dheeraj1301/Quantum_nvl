@@ -1,11 +1,13 @@
 import argparse
+import sys
+from pathlib import Path
 
-# Use relative imports so this module can be executed either as part of the
-# installed package (`python -m quantumflow_ai`) or directly from the source
-# tree. Absolute imports fail when the file is run as a script because
-# `quantumflow_ai` isn't then recognised as a package.
-from .notebooks.train_gnn_model import train_gnn
-from .notebooks.train_meta_model import train_meta_from_profiles
+# Allow execution both as ``python -m quantumflow_ai`` and
+# ``python quantumflow_ai/__main__.py`` by ensuring the package root is on the
+# path when run directly.
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    __package__ = "quantumflow_ai"
 
 
 def main() -> None:
@@ -24,8 +26,10 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.command == "train-gnn":
+        from quantumflow_ai.notebooks.train_gnn_model import train_gnn
         train_gnn(args.profiles, args.data_dir, args.model_out)
     elif args.command == "train-meta":
+        from quantumflow_ai.notebooks.train_meta_model import train_meta_from_profiles
         train_meta_from_profiles(args.profiles, args.data_dir)
     else:
         parser.print_help()

@@ -15,6 +15,10 @@ A command line interface is available via the package entry point. To see the op
 ```bash
 python -m quantumflow_ai --help
 ```
+You can also execute the CLI script directly from the repository:
+```bash
+python quantumflow_ai/__main__.py --help
+```
 
 For example, to train the GNN energy predictor:
 
