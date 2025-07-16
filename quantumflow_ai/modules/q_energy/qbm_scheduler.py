@@ -2,7 +2,6 @@
 # qbm_scheduler.py
 
 from __future__ import annotations
-import networkx as nx
 import pennylane as qml
 import pennylane.numpy as np
 from quantumflow_ai.core.logger import get_logger

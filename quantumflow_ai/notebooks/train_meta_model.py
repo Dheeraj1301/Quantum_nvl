@@ -2,6 +2,12 @@
 
 import json
 import os
+import sys
+from pathlib import Path
+
+# Allow running this script directly from the notebooks folder
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from quantumflow_ai.modules.q_energy.meta_scheduler import MetaScheduler
 
 def train_meta_from_profiles(profiles, data_dir="notebooks/profiles"):
