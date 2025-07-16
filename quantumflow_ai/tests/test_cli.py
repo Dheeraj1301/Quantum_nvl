@@ -42,5 +42,4 @@ def test_alias_for_script():
         text=True,
     )
     assert result.returncode == 0
-    # Should display the train-meta subcommand help
     assert 'train-meta' in result.stdout
