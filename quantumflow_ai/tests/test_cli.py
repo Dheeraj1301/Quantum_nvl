@@ -26,3 +26,20 @@ def test_script_help():
     )
     assert result.returncode == 0
     assert 'QuantumFlow utilities' in result.stdout
+
+
+def test_alias_for_script():
+    result = subprocess.run(
+        [
+            sys.executable,
+            '-m',
+            'quantumflow_ai',
+            'notebooks/train_meta_model.py',
+            '--help',
+        ],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert 'train-meta' in result.stdout

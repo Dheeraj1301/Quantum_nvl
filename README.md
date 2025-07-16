@@ -19,15 +19,3 @@ You can also execute the CLI script directly from the repository:
 ```bash
 python quantumflow_ai/__main__.py --help
 ```
-
-For example, to train the GNN energy predictor:
-
-```bash
-python -m quantumflow_ai train-gnn
-```
-
-To train the meta scheduler model:
-
-```bash
-python -m quantumflow_ai train-meta
-```
