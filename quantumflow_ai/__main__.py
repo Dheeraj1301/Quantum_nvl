@@ -31,13 +31,21 @@ def main() -> None:
     # GNN Trainer
     gnn = subparsers.add_parser("train-gnn", help="Train the GNN energy model")
     gnn.add_argument("--profiles", nargs="+", default=["a100", "h100", "gb200"], help="Hardware profile names")
-    gnn.add_argument("--data-dir", default="notebooks/profiles", help="Directory containing profile JSON files")
+    gnn.add_argument(
+        "--data-dir",
+        default="quantumflow_ai/notebooks/profiles",
+        help="Directory containing profile JSON files",
+    )
     gnn.add_argument("--model-out", default="modules/q_energy/model/gnn.pt", help="Path to save the trained model")
 
     # Meta Model Trainer
     meta = subparsers.add_parser("train-meta", help="Train the meta scheduler")
     meta.add_argument("--profiles", nargs="+", default=["a100", "h100", "gb200"], help="Hardware profile names")
-    meta.add_argument("--data-dir", default="notebooks/profiles", help="Directory containing profile JSON files")
+    meta.add_argument(
+        "--data-dir",
+        default="quantumflow_ai/notebooks/profiles",
+        help="Directory containing profile JSON files",
+    )
 
     args = parser.parse_args()
 

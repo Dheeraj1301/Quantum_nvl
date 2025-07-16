@@ -53,7 +53,9 @@ class MLEnergyPredictor:
         y = [d["cost"] for d in data]
         self.train(X, y)
 
-    def fine_tune_on_profile(self, profile_name: str, data_dir: str = "notebooks/profiles"):
+    def fine_tune_on_profile(
+        self, profile_name: str, data_dir: str = "quantumflow_ai/notebooks/profiles"
+    ):
         file_path = os.path.join(data_dir, f"{profile_name}.json")
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Profile data not found: {file_path}")

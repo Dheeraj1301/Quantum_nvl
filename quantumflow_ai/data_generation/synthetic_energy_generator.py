@@ -6,7 +6,12 @@ import argparse
 import os
 
 
-def generate_synthetic_energy_profiles(profile_name: str, num_graphs=100, num_jobs=8, output_dir="notebooks/profiles"):
+def generate_synthetic_energy_profiles(
+    profile_name: str,
+    num_graphs=100,
+    num_jobs=8,
+    output_dir="quantumflow_ai/notebooks/profiles",
+):
     os.makedirs(output_dir, exist_ok=True)
     data = []
 
@@ -39,7 +44,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", required=True, help="Profile name (e.g., A100, H100)")
     parser.add_argument("--samples", type=int, default=100)
-    parser.add_argument("--output_dir", default="notebooks/profiles")
+    parser.add_argument("--output_dir", default="quantumflow_ai/notebooks/profiles")
     args = parser.parse_args()
 
     generate_synthetic_energy_profiles(args.profile.lower(), args.samples, output_dir=args.output_dir)
