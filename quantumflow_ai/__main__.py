@@ -1,6 +1,11 @@
 import argparse
-from quantumflow_ai.notebooks.train_gnn_model import train_gnn
-from quantumflow_ai.notebooks.train_meta_model import train_meta_from_profiles
+
+# Use relative imports so this module can be executed either as part of the
+# installed package (`python -m quantumflow_ai`) or directly from the source
+# tree. Absolute imports fail when the file is run as a script because
+# `quantumflow_ai` isn't then recognised as a package.
+from .notebooks.train_gnn_model import train_gnn
+from .notebooks.train_meta_model import train_meta_from_profiles
 
 
 def main() -> None:
