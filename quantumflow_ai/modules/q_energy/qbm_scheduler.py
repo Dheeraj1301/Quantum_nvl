@@ -2,10 +2,19 @@
 # qbm_scheduler.py
 
 from __future__ import annotations
-import pennylane as qml
-import pennylane.numpy as np
+
+try:
+    import pennylane as qml
+    from pennylane import numpy as np
+    from quantumflow_ai.core.quantum_backend import get_quantum_device
+    PENNYLANE_AVAILABLE = True
+except Exception:  # pragma: no cover - dependency missing
+    qml = None
+    np = None
+    get_quantum_device = None
+    PENNYLANE_AVAILABLE = False
+
 from quantumflow_ai.core.logger import get_logger
-from quantumflow_ai.core.quantum_backend import get_quantum_device
 
 logger = get_logger("QBMScheduler")
 
@@ -31,6 +40,12 @@ def qbm_schedule(job_graph: dict, energy_profile: dict) -> dict:
     """
     jobs = list(job_graph["jobs"].keys())
     num_jobs = len(jobs)
+
+    if not PENNYLANE_AVAILABLE:
+        # Fallback: simple round-robin schedule when Pennylane is missing
+        logger.warning("Pennylane not available, using fallback QBM scheduler")
+        return {job: i for i, job in enumerate(jobs)}
+
     wires = num_jobs
 
     circuit = build_qbm_circuit(num_jobs, wires)
