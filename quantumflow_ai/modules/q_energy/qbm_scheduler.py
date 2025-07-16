@@ -2,9 +2,9 @@
 # qbm_scheduler.py
 
 from __future__ import annotations
-import numpy as np
 import networkx as nx
 import pennylane as qml
+import pennylane.numpy as np
 from quantumflow_ai.core.logger import get_logger
 from quantumflow_ai.core.quantum_backend import get_quantum_device
 
@@ -35,7 +35,8 @@ def qbm_schedule(job_graph: dict, energy_profile: dict) -> dict:
     wires = num_jobs
 
     circuit = build_qbm_circuit(num_jobs, wires)
-    init_params = 0.01 * np.random.randn(2 * num_jobs, requires_grad=True)
+    init_params = 0.01 * np.random.randn(2 * num_jobs)
+    init_params = np.array(init_params, requires_grad=True)
 
     opt = qml.AdamOptimizer(stepsize=0.05)
     max_iter = 100
