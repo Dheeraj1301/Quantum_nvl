@@ -2,6 +2,8 @@
 
 import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.exceptions import NotFittedError
+from sklearn.utils.validation import check_is_fitted
 import joblib
 import os
 
@@ -14,12 +16,28 @@ class MLEnergyPredictor:
         else:
             self.model = GradientBoostingRegressor()
 
+    def _is_model_fitted(self) -> bool:
+        """Return True if the underlying model has been fitted."""
+        try:
+            check_is_fitted(self.model)
+            return True
+        except NotFittedError:
+            return False
+
     def train(self, features: list[list[float]], targets: list[float]):
         self.model.fit(features, targets)
         joblib.dump(self.model, MODEL_PATH)
 
     def predict_energy_cost(self, feature: list[float]) -> float:
-        return self.model.predict([feature])[0]
+        """Predict energy cost for the provided feature vector.
+
+        If the model hasn't been trained yet, a simple heuristic based on the
+        sum of the feature values is used instead. This avoids errors when the
+        model file is missing or the model hasn't been fitted.
+        """
+        if not self._is_model_fitted():
+            return float(np.sum(feature))
+        return float(self.model.predict([feature])[0])
 
     def suggest_reschedule(self, schedule: dict, energy_profile: dict) -> dict:
         rescheduled = schedule.copy()
