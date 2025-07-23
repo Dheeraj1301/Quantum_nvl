@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quantum Compression</title>
+  <script defer src="/compressor.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    .result { margin-top: 2rem; white-space: pre-wrap; background: #f4f4f4; padding: 1rem; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>QuantumFlow AI — Compression Module</h1>
+  <form id="compressForm">
+    <input type="file" id="fileInput" accept=".csv" required />
+    <label>
+      <input type="checkbox" id="quantumToggle" checked />
+      Use Quantum Compression
+    </label>
+    <button type="submit">Compress</button>
+  </form>
+
+  <div id="output" class="result"></div>
+</body>
+</html>

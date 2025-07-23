@@ -1,18 +1,24 @@
-
 // app.js
 
-// Example: Redirect user to last opened module
 document.addEventListener("DOMContentLoaded", () => {
   const lastPage = sessionStorage.getItem("lastModule");
+
+  // Optional auto-redirect on fresh load of index.html
   if (lastPage && location.pathname.endsWith("index.html")) {
-    // Optionally auto-redirect or highlight
     console.log(`Last used module: ${lastPage}`);
+    // Optional: redirect to last module
+    // window.location.href = `/${lastPage}.html`;
   }
 
-  // Optional: Save last navigation
+  // Save module navigation state when buttons are clicked
   document.querySelectorAll("button").forEach(button => {
     button.addEventListener("click", () => {
-      const module = button.textContent.includes("Routing") ? "router" : "energy";
+      let module = "home";
+
+      if (button.textContent.toLowerCase().includes("routing")) module = "router";
+      else if (button.textContent.toLowerCase().includes("energy")) module = "energy";
+      else if (button.textContent.toLowerCase().includes("compression")) module = "compression";
+
       sessionStorage.setItem("lastModule", module);
     });
   });
