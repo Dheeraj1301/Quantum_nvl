@@ -26,11 +26,22 @@
       const jobGraph = parseJSON(getEl("jobGraph")?.value || "{}");
       const energyProfile = parseJSON(getEl("energyProfile")?.value || "{}");
 
-      const useQuantum = getEl("useQuantum")?.checked ?? false;
-      const useML = getEl("useML")?.checked ?? false;
-      const useHybrid = getEl("useHybrid")?.checked ?? false;
-      const useMeta = getEl("useMeta")?.checked ?? false;
-      const useGnn = getEl("useGnn")?.checked ?? false;
+      // Safely access checkbox states. Older browsers or pages missing
+      // these elements may return null so we fall back to false.
+      const useQuantumEl = getEl("useQuantum");
+      const useQuantum = useQuantumEl ? useQuantumEl.checked : false;
+
+      const useMLEl = getEl("useML");
+      const useML = useMLEl ? useMLEl.checked : false;
+
+      const useHybridEl = getEl("useHybrid");
+      const useHybrid = useHybridEl ? useHybridEl.checked : false;
+
+      const useMetaEl = getEl("useMeta");
+      const useMeta = useMetaEl ? useMetaEl.checked : false;
+
+      const useGnnEl = getEl("useGnn");
+      const useGnn = useGnnEl ? useGnnEl.checked : false;
 
       const maxEnergy = Number(getEl("maxEnergy")?.value || 100);
       const qIterations = Number(getEl("qIterations")?.value || 10);
