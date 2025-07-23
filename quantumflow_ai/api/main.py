@@ -21,10 +21,6 @@ app.add_middleware(
 app.include_router(q_router)
 app.include_router(energy_router)
 
-# ✅ Serve frontend
-app.mount("/", StaticFiles(directory="quantumflow_ai/frontend/public", html=True), name="static")
-
-
 # ✅ New: Q-Compression Upload Endpoint
 @app.post("/q-compression/upload")
 async def compress_upload(file: UploadFile = File(...), use_quantum: bool = True):
@@ -34,3 +30,7 @@ async def compress_upload(file: UploadFile = File(...), use_quantum: bool = True
         return JSONResponse(content=result)
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
+
+
+# ✅ Serve frontend (mounted last so API routes take precedence)
+app.mount("/", StaticFiles(directory="quantumflow_ai/frontend/public", html=True), name="static")
