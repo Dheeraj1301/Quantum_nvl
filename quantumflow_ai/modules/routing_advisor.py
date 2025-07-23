@@ -38,7 +38,11 @@ def advise_routing_strategy() -> Dict[str, Any]:
         return {"note": "Not enough data for suggestion"}
 
     X = prepare_lstm_input(logs)
-    if not X or (hasattr(X, "size") and X.size == 0):
+    if (
+        X is None
+        or (isinstance(X, list) and len(X) == 0)
+        or (hasattr(X, "size") and X.size == 0)
+    ):
         return {"note": "LSTM features unavailable"}
 
     y = None

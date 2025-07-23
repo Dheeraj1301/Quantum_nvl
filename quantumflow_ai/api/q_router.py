@@ -89,7 +89,11 @@ def suggest_optimized_routing():
             raise HTTPException(status_code=400, detail="Not enough logs to make a prediction.")
 
         X = prepare_lstm_input(logs)
-        if not X or (hasattr(X, "size") and X.size == 0):
+        if (
+            X is None
+            or (isinstance(X, list) and len(X) == 0)
+            or (hasattr(X, "size") and X.size == 0)
+        ):
             return {
                 "status": "unavailable",
                 "note": "LSTM features unavailable; install numpy to enable predictions",
