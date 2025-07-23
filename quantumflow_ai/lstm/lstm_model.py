@@ -12,7 +12,8 @@ except Exception:  # pragma: no cover - optional dependency
     load_model = None
     TENSORFLOW_AVAILABLE = False
 
-MODEL_PATH = "lstm_model.keras"
+# Save the model next to this file for stability across runs
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "lstm_model.keras")
 
 def build_lstm_model(input_dim: int, output_dim: int = 1):
     """Create a simple LSTM model if TensorFlow is installed."""

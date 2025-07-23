@@ -8,8 +8,10 @@
 <body>
   <div class="container">
     <h1>⚡ Q-Energy Scheduler</h1>
+
     <form id="energyForm">
-      <label>Job Graph (JSON):</label>
+      <!-- Job Graph JSON input -->
+      <label for="jobGraph">Job Graph (JSON):</label>
       <textarea id="jobGraph" rows="6">{
   "jobs": {
     "A": [],
@@ -17,35 +19,49 @@
     "C": ["A"]
   }
 }</textarea>
-      <label>Energy Profile (JSON):</label>
+
+      <!-- Energy Profile JSON input -->
+      <label for="energyProfile">Energy Profile (JSON):</label>
       <textarea id="energyProfile" rows="4">{
   "A": 10.0,
   "B": 8.0,
   "C": 6.0
 }</textarea>
-      <label><input type="checkbox" id="useQuantum" checked /> Use Quantum</label>
-      <label><input type="checkbox" id="useML" checked /> Use ML Rescheduler</label>
-      <label><input type="checkbox" id="useHybrid" checked /> Use Hybrid Optimizer</label>
 
-      <label>Max Energy Limit:
-        <input type="number" id="maxEnergy" min="1" max="1000" value="100" />
-      </label>
-      <label>Quantum Iterations:
-        <input type="number" id="qIterations" min="1" max="100" value="10" />
-      </label>
-      <label>Learning Rate:
-        <input type="number" id="learningRate" min="0.0001" max="1" step="0.0001" value="0.01" />
-      </label>
-      <label>Batch Size:
-        <input type="number" id="batchSize" min="1" max="1024" value="32" />
+      <!-- Strategy checkboxes -->
+      <label><input type="checkbox" id="useQuantum" checked> Use Quantum</label>
+      <label><input type="checkbox" id="useML" checked> Use ML Rescheduler</label>
+      <label><input type="checkbox" id="useHybrid" checked> Use Hybrid Optimizer</label>
+
+      <!-- Numerical parameters -->
+      <label for="maxEnergy">Max Energy Limit:
+        <input type="number" id="maxEnergy" min="1" max="1000" value="100">
       </label>
 
+      <label for="qIterations">Quantum Iterations:
+        <input type="number" id="qIterations" min="1" max="100" value="10">
+      </label>
+
+      <label for="learningRate">Learning Rate:
+        <input type="number" id="learningRate" min="0.0001" max="1" step="0.0001" value="0.01">
+      </label>
+
+      <label for="batchSize">Batch Size:
+        <input type="number" id="batchSize" min="1" max="1024" value="32">
+      </label>
+
+      <!-- Validation warning placeholder -->
       <p id="warning" style="color:red;"></p>
+
+      <!-- Submit button -->
       <button type="submit">Schedule Jobs</button>
     </form>
+
+    <!-- Output results -->
     <div id="energyOutput" class="output-box"></div>
     <a href="index.html">⬅️ Back to module selection</a>
   </div>
+
   <script src="energy.js" defer></script>
 </body>
 </html>
