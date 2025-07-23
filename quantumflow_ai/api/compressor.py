@@ -38,7 +38,7 @@ def run_compression(data: np.ndarray, use_quantum: bool = True) -> dict:
             "quantum_loss": float(q_loss),
             "pca_loss": float(pca_loss),
             "compression_ratio": compression_ratio,
-            "compressed_vectors": compressed,
+            "compressed_vectors": [list(vec) for vec in compressed],
         }
 
     else:
