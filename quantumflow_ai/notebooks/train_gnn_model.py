@@ -16,17 +16,23 @@ from quantumflow_ai.modules.q_energy.gnn_predictor import GNNPredictor, prepare_
 
 def train_gnn(
     profiles=["a100", "h100", "gb200"],
-    data_dir="quantumflow_ai/notebooks/profiles",
+    data_dir=None,
     model_out="modules/q_energy/model/gnn.pt",
 ):
+    """Train the GNN cost model from hardware profiles."""
+
+    if data_dir is None:
+        data_dir = Path(__file__).resolve().parent / "profiles"
+    else:
+        data_dir = Path(data_dir)
     model = GNNPredictor(in_channels=1)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
     loss_fn = torch.nn.MSELoss()
 
     dataset = []
     for profile in profiles:
-        path = os.path.join(data_dir, f"{profile}.json")
-        if not os.path.exists(path):
+        path = data_dir / f"{profile}.json"
+        if not path.exists():
             continue
         with open(path) as f:
             items = json.load(f)
