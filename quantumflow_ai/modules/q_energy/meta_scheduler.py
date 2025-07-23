@@ -1,5 +1,3 @@
-# modules/q_energy/meta_scheduler.py
-
 from sklearn.ensemble import RandomForestClassifier
 import joblib
 import os
@@ -16,7 +14,6 @@ class MetaScheduler:
 
     def train(self, X: list[list[float]], y: list[str]):
         self.model.fit(X, y)
-        # Ensure the target directory exists before attempting to save the model
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         joblib.dump(self.model, self.model_path)
 

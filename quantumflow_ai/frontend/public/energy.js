@@ -1,10 +1,13 @@
 document.getElementById("energyForm").addEventListener("submit", function (e) {
   e.preventDefault();
+
   const jobGraph = JSON.parse(document.getElementById("jobGraph").value);
   const energyProfile = JSON.parse(document.getElementById("energyProfile").value);
   const useQuantum = document.getElementById("useQuantum").checked;
   const useML = document.getElementById("useML").checked;
   const useHybrid = document.getElementById("useHybrid").checked;
+  const useMeta = document.getElementById("useMeta").checked;
+  const useGNN = document.getElementById("useGNN").checked;
 
   fetch("/q-energy/schedule", {
     method: "POST",
@@ -14,8 +17,10 @@ document.getElementById("energyForm").addEventListener("submit", function (e) {
       energy_profile: energyProfile,
       use_quantum: useQuantum,
       use_ml: useML,
+      use_hybrid: useHybrid,
       use_qaoa: false,
-      use_hybrid: useHybrid
+      use_meta: useMeta,
+      use_gnn: useGNN
     })
   })
     .then(res => res.json())

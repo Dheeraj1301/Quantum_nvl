@@ -1,5 +1,3 @@
-# hybrid_scheduler.py
-
 from quantumflow_ai.modules.q_energy.qbm_scheduler import qbm_schedule
 from quantumflow_ai.modules.q_energy.classical_scheduler import classical_schedule
 from quantumflow_ai.modules.q_energy.ml_scheduler_predictor import MLEnergyPredictor
