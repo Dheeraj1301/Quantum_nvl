@@ -1,14 +1,24 @@
-document.getElementById("energyForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const jobGraph = JSON.parse(document.getElementById("jobGraph").value);
-  const energyProfile = JSON.parse(document.getElementById("energyProfile").value);
-  const useQuantum = document.getElementById("useQuantum").checked;
-  const useML = document.getElementById("useML").checked;
-  const useHybrid = document.getElementById("useHybrid").checked;
-  const maxEnergy = Number(document.getElementById("maxEnergy").value);
-  const qIterations = Number(document.getElementById("qIterations").value);
-  const learningRate = Number(document.getElementById("learningRate").value);
-  const batchSize = Number(document.getElementById("batchSize").value);
+document.addEventListener("DOMContentLoaded", () => {
+  const energyForm = document.getElementById("energyForm");
+  if (!energyForm) return;
+
+  energyForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const jobGraph = JSON.parse(document.getElementById("jobGraph").value);
+    const energyProfile = JSON.parse(document.getElementById("energyProfile").value);
+
+    const useQuantumEl = document.getElementById("useQuantum");
+    const useMLel = document.getElementById("useML");
+    const useHybridEl = document.getElementById("useHybrid");
+
+    const useQuantum = useQuantumEl ? useQuantumEl.checked : false;
+    const useML = useMLel ? useMLel.checked : false;
+    const useHybrid = useHybridEl ? useHybridEl.checked : false;
+    const maxEnergy = Number(document.getElementById("maxEnergy").value);
+    const qIterations = Number(document.getElementById("qIterations").value);
+    const learningRate = Number(document.getElementById("learningRate").value);
+    const batchSize = Number(document.getElementById("batchSize").value);
 
   let warning = "";
   if (maxEnergy < 1 || maxEnergy > 1000) {
@@ -51,4 +61,5 @@ document.getElementById("energyForm").addEventListener("submit", function (e) {
     .catch(err => {
       document.getElementById("energyOutput").textContent = `Error: ${err.message}`;
     });
+});
 });
