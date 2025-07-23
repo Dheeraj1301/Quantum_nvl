@@ -17,7 +17,7 @@ from quantumflow_ai.modules.q_energy.gnn_predictor import GNNPredictor, prepare_
 def train_gnn(
     profiles=["a100", "h100", "gb200"],
     data_dir="quantumflow_ai/notebooks/profiles",
-    model_out="modules/q_energy/model/gnn.pt",
+    model_out="quantumflow_ai/modules/q_energy/model/gnn.pt",
 ):
     model = GNNPredictor(in_channels=1)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
