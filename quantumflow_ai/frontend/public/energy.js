@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const energyForm = document.getElementById("energyForm");
   if (!energyForm) return;
@@ -7,16 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     try {
-      const jobGraph = JSON.parse(document.getElementById("jobGraph").value);
-      const energyProfile = JSON.parse(document.getElementById("energyProfile").value);
+      const jobGraphEl = document.getElementById("jobGraph");
+      const energyProfileEl = document.getElementById("energyProfile");
 
-      const useQuantumEl = document.getElementById("useQuantum");
-      const useMLEl = document.getElementById("useML");
-      const useHybridEl = document.getElementById("useHybrid");
+      const jobGraph = jobGraphEl ? JSON.parse(jobGraphEl.value) : {};
+      const energyProfile = energyProfileEl ? JSON.parse(energyProfileEl.value) : {};
 
-      const useQuantum = useQuantumEl?.checked || false;
-      const useML = useMLEl?.checked || false;
-      const useHybrid = useHybridEl?.checked || false;
+      const useQuantum = document.getElementById("useQuantum")?.checked || false;
+      const useML = document.getElementById("useML")?.checked || false;
+      const useHybrid = document.getElementById("useHybrid")?.checked || false;
 
       const maxEnergy = Number(document.getElementById("maxEnergy")?.value || 0);
       const qIterations = Number(document.getElementById("qIterations")?.value || 0);
@@ -35,12 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (warning) {
-        const warningEl = document.getElementById("warning");
-        if (warningEl) warningEl.textContent = warning;
+        document.getElementById("warning").textContent = warning;
         return;
       } else {
-        const warningEl = document.getElementById("warning");
-        if (warningEl) warningEl.textContent = "";
+        document.getElementById("warning").textContent = "";
       }
 
       fetch("/q-energy/schedule", {
