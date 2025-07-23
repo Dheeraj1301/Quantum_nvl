@@ -110,3 +110,26 @@ function analyzeRouting(assignments, numExperts) {
 
   document.getElementById("output").innerHTML += insights;
 }
+
+document.getElementById("suggestButton").addEventListener("click", function () {
+  fetch("/q-routing/suggest")
+    .then(res => {
+      if (!res.ok) throw new Error("Suggestion failed.");
+      return res.json();
+    })
+    .then(data => {
+      const div = document.getElementById("suggestion");
+      if (data.status === "success") {
+        div.innerHTML = `
+          <h3>LSTM Suggestion</h3>
+          <p><strong>Suggested Energy:</strong> ${data.suggested_energy}</p>
+          <p>${data.note || ""}</p>
+        `;
+      } else {
+        div.innerHTML = `<p>${data.note || "No suggestion available."}</p>`;
+      }
+    })
+    .catch(err => {
+      document.getElementById("suggestion").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+    });
+});
