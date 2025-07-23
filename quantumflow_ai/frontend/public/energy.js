@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 document.getElementById("energyForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -10,6 +11,23 @@ document.getElementById("energyForm").addEventListener("submit", function (e) {
   const qIterations = Number(document.getElementById("qIterations").value);
   const learningRate = Number(document.getElementById("learningRate").value);
   const batchSize = Number(document.getElementById("batchSize").value);
+=======
+document.addEventListener("DOMContentLoaded", () => {
+  const energyForm = document.getElementById("energyForm");
+  if (!energyForm) return;
+
+  energyForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const jobGraph = JSON.parse(document.getElementById("jobGraph").value);
+    const energyProfile = JSON.parse(document.getElementById("energyProfile").value);
+    const useQuantum = document.getElementById("useQuantum")?.checked || false;
+    const useML = document.getElementById("useML")?.checked || false;
+    const useHybrid = document.getElementById("useHybrid")?.checked || false;
+    const maxEnergy = Number(document.getElementById("maxEnergy").value);
+    const qIterations = Number(document.getElementById("qIterations").value);
+    const learningRate = Number(document.getElementById("learningRate").value);
+    const batchSize = Number(document.getElementById("batchSize").value);
+>>>>>>> 9d1f2072b0df781738c874a5b78f3874085871ba
 
   let warning = "";
   if (maxEnergy < 1 || maxEnergy > 1000) {
@@ -53,4 +71,5 @@ document.getElementById("energyForm").addEventListener("submit", function (e) {
     .catch(err => {
       document.getElementById("energyOutput").textContent = `Error: ${err.message}`;
     });
+});
 });
