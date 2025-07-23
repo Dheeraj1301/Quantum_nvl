@@ -16,6 +16,10 @@ class EnergyInput(BaseModel):
     use_ml: bool = False
     use_qaoa: bool = False
     use_hybrid: bool = True
+    max_energy_limit: int | None = None
+    quantum_iterations: int | None = None
+    learning_rate: float | None = None
+    batch_size: int | None = None
 
 @router.post("/q-energy/schedule")
 def schedule_energy(input: EnergyInput):
