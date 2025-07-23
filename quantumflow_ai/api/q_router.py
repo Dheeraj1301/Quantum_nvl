@@ -6,7 +6,13 @@ from typing import List
 import pandas as pd
 
 from quantumflow_ai.modules.q_routing import optimize_routing, classical_route
-from quantumflow_ai.lstm.routing_log import save_log_entry, get_last_logs, prepare_lstm_input
+from quantumflow_ai.lstm.routing_log import (
+    save_log_entry,
+    get_last_logs,
+    prepare_lstm_input,
+    NUMPY_AVAILABLE,
+    np,
+)
 from quantumflow_ai.lstm.lstm_model import load_or_train_model
 from quantumflow_ai.core.logger import get_logger
 
@@ -81,8 +87,20 @@ def suggest_optimized_routing():
         logs = get_last_logs()
         if len(logs) < 2:
             raise HTTPException(status_code=400, detail="Not enough logs to make a prediction.")
+
         X = prepare_lstm_input(logs)
-        model = load_or_train_model(X)
+        if not X or (hasattr(X, "size") and X.size == 0):
+            return {
+                "status": "unavailable",
+                "note": "LSTM features unavailable; install numpy to enable predictions",
+            }
+
+        y = None
+        if NUMPY_AVAILABLE:
+            y = np.array([log.get("energy", 0.0) for log in logs[-X.shape[1]:]], dtype=float)
+            y = y.reshape(1, -1, 1)
+
+        model = load_or_train_model(X, y)
         prediction = model.predict(X)
 
         return {
