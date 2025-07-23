@@ -6,7 +6,10 @@ import sys
 from pathlib import Path
 
 # Allow running this script directly from the notebooks folder
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# We need the repository root (two levels up) on the Python path so that the
+# ``quantumflow_ai`` package can be imported when this file is executed as a
+# standalone script.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from quantumflow_ai.modules.q_energy.meta_scheduler import MetaScheduler
 
