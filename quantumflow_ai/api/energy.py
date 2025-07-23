@@ -12,12 +12,22 @@ from quantumflow_ai.modules.q_energy.gnn_predictor import predict_energy_with_gn
 router = APIRouter()
 
 class EnergyInput(BaseModel):
+    """Input schema for the energy scheduling endpoint."""
+
     job_graph: dict
     energy_profile: dict
+
+    # Flags controlling which optimisation path to use
     use_quantum: bool = True
     use_ml: bool = False
     use_qaoa: bool = False
     use_hybrid: bool = True
+
+    # Additional optional modes
+    use_gnn: bool = False
+    use_meta: bool = False
+
+    # Hyperparameters for advanced algorithms
     max_energy_limit: int | None = None
     quantum_iterations: int | None = None
     learning_rate: float | None = None
