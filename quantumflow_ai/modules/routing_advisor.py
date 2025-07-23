@@ -8,6 +8,8 @@ from quantumflow_ai.lstm.routing_log import (
     save_log_entry,
     get_last_logs,
     prepare_lstm_input,
+    NUMPY_AVAILABLE,
+    np,
 )
 from quantumflow_ai.lstm.lstm_model import load_or_train_model
 
@@ -36,7 +38,15 @@ def advise_routing_strategy() -> Dict[str, Any]:
         return {"note": "Not enough data for suggestion"}
 
     X = prepare_lstm_input(logs)
-    model = load_or_train_model(X)
+    if not X or (hasattr(X, "size") and X.size == 0):
+        return {"note": "LSTM features unavailable"}
+
+    y = None
+    if NUMPY_AVAILABLE:
+        y = np.array([log.get("energy", 0.0) for log in logs[-X.shape[1]:]], dtype=float)
+        y = y.reshape(1, -1, 1)
+
+    model = load_or_train_model(X, y)
     prediction = model.predict(X)[0][0]
     suggest_quantum = bool(prediction >= 0.5)
 
