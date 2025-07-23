@@ -1,17 +1,4 @@
-<<<<<<< HEAD
-document.getElementById("energyForm").addEventListener("submit", function (e) {
-  e.preventDefault();
 
-  const jobGraph = JSON.parse(document.getElementById("jobGraph").value);
-  const energyProfile = JSON.parse(document.getElementById("energyProfile").value);
-  const useQuantum = document.getElementById("useQuantum").checked;
-  const useML = document.getElementById("useML").checked;
-  const useHybrid = document.getElementById("useHybrid").checked;
-  const maxEnergy = Number(document.getElementById("maxEnergy").value);
-  const qIterations = Number(document.getElementById("qIterations").value);
-  const learningRate = Number(document.getElementById("learningRate").value);
-  const batchSize = Number(document.getElementById("batchSize").value);
-=======
 document.addEventListener("DOMContentLoaded", () => {
   const energyForm = document.getElementById("energyForm");
   if (!energyForm) return;
@@ -27,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const qIterations = Number(document.getElementById("qIterations").value);
     const learningRate = Number(document.getElementById("learningRate").value);
     const batchSize = Number(document.getElementById("batchSize").value);
->>>>>>> 9d1f2072b0df781738c874a5b78f3874085871ba
 
   let warning = "";
   if (maxEnergy < 1 || maxEnergy > 1000) {
