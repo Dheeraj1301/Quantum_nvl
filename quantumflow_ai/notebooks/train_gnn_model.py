@@ -7,7 +7,10 @@ import sys
 from pathlib import Path
 
 # Allow running this script directly from the notebooks folder
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# Insert the repository root (two levels up) into ``sys.path`` so that the
+# ``quantumflow_ai`` package can be imported when running this script
+# standalone.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from quantumflow_ai.modules.q_energy.gnn_predictor import GNNPredictor, prepare_graph_data
 
