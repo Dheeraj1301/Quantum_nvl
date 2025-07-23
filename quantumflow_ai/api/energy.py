@@ -18,6 +18,8 @@ class EnergyInput(BaseModel):
     use_ml: bool = False
     use_qaoa: bool = False
     use_hybrid: bool = True
+    use_meta: bool = False
+    use_gnn: bool = False
     max_energy_limit: int | None = None
     quantum_iterations: int | None = None
     learning_rate: float | None = None
