@@ -34,6 +34,8 @@
         const useQuantum = getEl("useQuantum")?.checked ?? false;
         const useML = getEl("useML")?.checked ?? false;
         const useHybrid = getEl("useHybrid")?.checked ?? false;
+        const useMeta = getEl("useMeta")?.checked ?? false;
+        const useGnn = getEl("useGnn")?.checked ?? false;
 
         const maxEnergy = Number(getEl("maxEnergy")?.value ?? 100);
         const qIterations = Number(getEl("qIterations")?.value ?? 10);
@@ -69,6 +71,8 @@
             use_ml: useML,
             use_qaoa: false,
             use_hybrid: useHybrid,
+            use_meta: useMeta,
+            use_gnn: useGnn,
             max_energy_limit: maxEnergy,
             quantum_iterations: qIterations,
             learning_rate: learningRate,
