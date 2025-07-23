@@ -1,7 +1,6 @@
 # train_meta_model.py
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -14,13 +13,30 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from quantumflow_ai.modules.q_energy.meta_scheduler import MetaScheduler
 
 def train_meta_from_profiles(
-    profiles, data_dir="quantumflow_ai/notebooks/profiles"
+    profiles,
+    data_dir=None,
 ):
+    """Train the meta scheduling model from hardware profiles.
+
+    Parameters
+    ----------
+    profiles : list[str]
+        Names of the hardware profile JSON files (without extension).
+    data_dir : str | Path | None, optional
+        Directory containing the ``*.json`` profile data.  If ``None``, the
+        directory adjacent to this script named ``profiles`` will be used.  A
+        ``RuntimeError`` is raised if no training data can be loaded.
+    """
+
+    if data_dir is None:
+        data_dir = Path(__file__).resolve().parent / "profiles"
+    else:
+        data_dir = Path(data_dir)
     all_X, all_y = [], []
 
     for profile in profiles:
-        path = os.path.join(data_dir, f"{profile}.json")
-        if not os.path.exists(path):
+        path = data_dir / f"{profile}.json"
+        if not path.exists():
             print(f"⚠️ Skipping {profile}, file not found.")
             continue
         with open(path) as f:
