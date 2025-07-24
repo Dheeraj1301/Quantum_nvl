@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('compressForm');
   const fileInput = document.getElementById('fileInput');
-  const quantumToggle = document.getElementById('quantumToggle');
+  const useQuantum = document.getElementById('quantumToggle').checked;
   const output = document.getElementById('output');
 
   form.addEventListener('submit', async (e) => {
@@ -12,17 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
 
-    const useQuantum = quantumToggle.checked;
-    const endpoint = `/q-compression/upload?use_quantum=${useQuantum}`;
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        body: formData,
-      });
+  try {
+    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}`, {
+      method: 'POST',
+      body: formData
+    });
 
       if (!response.ok) {
         throw new Error(`Server returned ${response.status}`);
