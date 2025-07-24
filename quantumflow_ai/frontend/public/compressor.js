@@ -5,6 +5,8 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const useQuantum = document.getElementById('quantumToggle').checked;
   const noise = document.getElementById('noiseToggle').checked;
   const noiseLevel = document.getElementById('noiseLevel').value;
+  const useDropout = document.getElementById('dropoutToggle').checked;
+  const dropoutProb = document.getElementById('dropoutProb').value;
   const denoise = document.getElementById('denoiseToggle').checked;
   const output = document.getElementById('output');
 
@@ -16,8 +18,17 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const formData = new FormData();
   formData.append('file', fileInput.files[0]);
 
+  const queryParams = new URLSearchParams({
+    use_quantum: useQuantum,
+    use_denoiser: denoise,
+    noise: noise,
+    noise_level: noiseLevel,
+    use_dropout: useDropout,
+    dropout_prob: dropoutProb,
+  });
+
   try {
-    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}`, {
+    const response = await fetch(`/q-compression/upload?${queryParams.toString()}`, {
       method: 'POST',
       body: formData
     });
