@@ -2,25 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Quantum Compression</title>
+  <title>QuantumFlow Compression</title>
   <script defer src="/compressor.js"></script>
   <style>
-    body { font-family: sans-serif; padding: 2rem; }
-    .result { margin-top: 2rem; white-space: pre-wrap; background: #f4f4f4; padding: 1rem; border-radius: 8px; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f9f9f9;
+    }
+    h1 {
+      color: #222;
+    }
+    form {
+      margin-bottom: 2rem;
+    }
+    input[type="file"] {
+      margin-bottom: 1rem;
+    }
+    .result {
+      white-space: pre-wrap;
+      background: #eef;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccd;
+    }
   </style>
 </head>
 <body>
-  <h1>QuantumFlow AI — Compression Module</h1>
+  <h1>🗜️ Q-Compression Module</h1>
+
   <form id="compressForm">
-    <input type="file" id="fileInput" accept=".csv" required />
-    <label>
-      <input type="checkbox" id="quantumToggle" checked />
-      Use Quantum Compression
-    </label>
+    <input type="file" name="file" id="fileInput" accept=".csv" required />
+    <div>
+      <label>
+        <input type="checkbox" id="quantumToggle" checked />
+        Use Quantum Compression
+      </label>
+    </div>
     <button type="submit">Compress</button>
   </form>
 
-  <div id="output" class="result"></div>
-  <a href="index.html">⬅️ Back to module selection</a>
+  <div id="output" class="result">Upload a CSV and press Compress.</div>
 </body>
 </html>
