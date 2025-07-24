@@ -2,8 +2,6 @@
 
 This project contains a lightweight demonstration of quantum-inspired modules for token routing and energy scheduling. It includes simple training utilities and a small FastAPI application.
 
-The compression demo now supports optional depolarizing noise. When using the web UI, enable **Inject Noise** and adjust the **Noise Level** slider (0.0–0.3) to simulate noisy circuits.
-
 ## Running tests
 
 ```bash

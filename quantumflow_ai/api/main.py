@@ -23,20 +23,10 @@ app.include_router(energy_router)
 
 # ✅ New: Q-Compression Upload Endpoint
 @app.post("/q-compression/upload")
-async def compress_upload(
-    file: UploadFile = File(...),
-    use_quantum: bool = True,
-    noise: bool = False,
-    noise_level: float = 0.0,
-):
+async def compress_upload(file: UploadFile = File(...), use_quantum: bool = True):
     try:
         data = read_csv_as_array(file)
-        result = run_compression(
-            data,
-            use_quantum=use_quantum,
-            noise=noise,
-            noise_level=noise_level,
-        )
+        result = run_compression(data, use_quantum=use_quantum)
         return JSONResponse(content=result)
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
