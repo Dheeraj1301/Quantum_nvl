@@ -4,6 +4,7 @@ import numpy as np
 from quantumflow_ai.modules.q_compression.q_autoencoder import QuantumAutoencoder
 from quantumflow_ai.modules.q_compression.classical_compressor import ClassicalCompressor
 from quantumflow_ai.modules.q_compression.denoiser import LatentDenoiser, TORCH_AVAILABLE
+from quantumflow_ai.modules.q_compression.vqc_classifier import VQCClassifier
 try:
     import torch
 except Exception:  # pragma: no cover - optional dependency
@@ -42,10 +43,28 @@ def run_compression(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
+    predict_first: bool = False,
 ) -> dict:
     latent_qubits = 4
 
     noise_level = max(0.0, min(noise_level, 0.3))
+
+    predictions = None
+
+    if predict_first:
+        classical = ClassicalCompressor(n_components=latent_qubits)
+        classical.fit(data)
+        recon = classical.inverse_transform(classical.transform(data))
+        errors = np.mean((data - recon) ** 2, axis=1)
+        threshold = float(np.median(errors))
+        labels = (errors <= threshold).astype(int)
+        try:
+            vqc = VQCClassifier(n_qubits=data.shape[1])
+            vqc.train(list(data), labels, steps=20)
+            predictions = vqc.predict(list(data))
+        except Exception:
+            logger.exception("VQC training failed; falling back to labels")
+            predictions = labels.tolist()
 
     if use_quantum:
         try:
@@ -89,6 +108,7 @@ def run_compression(
                 "pca_loss": float(pca_loss),
                 "compression_ratio": compression_ratio,
                 "compressed_vectors": [list(vec) for vec in compressed],
+                "predictions": predictions,
             }
         
         except Exception:
@@ -104,4 +124,5 @@ def run_compression(
         "mode": "classical",
         "compression_ratio": round(latent_qubits / data.shape[1], 3),
         "compressed_vectors": compressed.tolist(),
+        "predictions": predictions,
     }
