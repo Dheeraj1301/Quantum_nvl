@@ -2,10 +2,13 @@ from fastapi import UploadFile
 import pandas as pd
 import numpy as np
 from quantumflow_ai.modules.q_compression.q_autoencoder import QuantumAutoencoder
-from quantumflow_ai.modules.q_compression.classical_compressor import ClassicalCompressor
+from quantumflow_ai.modules.q_compression.classical_compressor import (
+    ClassicalCompressor,
+)
 from quantumflow_ai.core.logger import get_logger
 
 logger = get_logger("CompressorAPI")
+
 
 def read_csv_as_array(file: UploadFile) -> np.ndarray:
     """Load an uploaded CSV into a numeric numpy array.
@@ -30,16 +33,20 @@ def read_csv_as_array(file: UploadFile) -> np.ndarray:
     logger.info(f"[Compressor] Loaded data shape: {data.shape}")
     return data
 
+
 def run_compression(
     data: np.ndarray,
     use_quantum: bool = True,
     *,
     noise: bool = False,
     noise_level: float = 0.0,
+    use_dropout: bool = False,
+    dropout_prob: float = 0.0,
 ) -> dict:
     latent_qubits = 4
 
     noise_level = max(0.0, min(noise_level, 0.3))
+    dropout_prob = max(0.0, min(dropout_prob, 1.0))
 
     if use_quantum:
         try:
@@ -48,6 +55,8 @@ def run_compression(
                 latent_qubits=latent_qubits,
                 noise=noise,
                 noise_level=noise_level,
+                use_dropout=use_dropout,
+                dropout_prob=dropout_prob,
             )
             weights = qae.train(data[:10], steps=50)
             compressed = qae.encode(data, weights)
@@ -71,7 +80,7 @@ def run_compression(
                 "compression_ratio": compression_ratio,
                 "compressed_vectors": [list(vec) for vec in compressed],
             }
-        
+
         except Exception:
             # If quantum compression fails (e.g. optional deps missing),
             # fall back to classical compression so the API still succeeds.
