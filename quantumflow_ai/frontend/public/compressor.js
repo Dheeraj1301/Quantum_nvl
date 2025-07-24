@@ -3,7 +3,6 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
 
   const fileInput = document.getElementById('fileInput');
 
-  // Gracefully handle optional toggles that may not exist yet
   const useQuantumEl = document.getElementById('quantumToggle');
   const useQuantum = useQuantumEl ? useQuantumEl.checked : false;
 
@@ -12,6 +11,12 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
 
   const noiseLevelEl = document.getElementById('noiseLevel');
   const noiseLevel = noiseLevelEl ? noiseLevelEl.value : 0;
+
+  const dropoutToggle = document.getElementById('dropoutToggle');
+  const useDropout = dropoutToggle ? dropoutToggle.checked : false;
+
+  const dropoutProbEl = document.getElementById('dropoutProb');
+  const dropoutProb = dropoutProbEl ? dropoutProbEl.value : 0;
 
   const denoiseEl = document.getElementById('denoiseToggle');
   const denoise = denoiseEl ? denoiseEl.checked : false;
@@ -30,7 +35,17 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   formData.append('file', fileInput.files[0]);
 
   try {
-    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&enable_pruning=${prune}`, {
+    const query = new URLSearchParams({
+      use_quantum: useQuantum,
+      use_denoiser: denoise,
+      noise: noise,
+      noise_level: noiseLevel,
+      use_dropout: useDropout,
+      dropout_prob: dropoutProb,
+      enable_pruning: prune
+    });
+
+    const response = await fetch(`/q-compression/upload?${query.toString()}`, {
       method: 'POST',
       body: formData
     });
