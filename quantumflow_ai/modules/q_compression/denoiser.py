@@ -14,6 +14,9 @@ from quantumflow_ai.core.logger import get_logger
 logger = get_logger("LatentDenoiser")
 
 
+from typing import Union
+
+
 class LatentDenoiser(nn.Module if TORCH_AVAILABLE else object):  # pragma: no cover - optional
     """Simple autoencoder to denoise latent vectors."""
 
@@ -31,7 +34,7 @@ class LatentDenoiser(nn.Module if TORCH_AVAILABLE else object):  # pragma: no co
         return self.model(x)
 
     def train_denoiser(
-        self, vectors: list | "torch.Tensor", epochs: int = 50, lr: float = 1e-3
+        self, vectors: Union[list, "torch.Tensor"], epochs: int = 50, lr: float = 1e-3
     ) -> float:
         """Train the autoencoder on latent vectors."""
         if not TORCH_AVAILABLE:
