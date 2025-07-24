@@ -3,6 +3,11 @@ import pandas as pd
 import numpy as np
 from quantumflow_ai.modules.q_compression.q_autoencoder import QuantumAutoencoder
 from quantumflow_ai.modules.q_compression.classical_compressor import ClassicalCompressor
+from quantumflow_ai.modules.q_compression.denoiser import LatentDenoiser, TORCH_AVAILABLE
+try:
+    import torch
+except Exception:  # pragma: no cover - optional dependency
+    torch = None  # type: ignore
 from quantumflow_ai.core.logger import get_logger
 
 logger = get_logger("CompressorAPI")
@@ -34,6 +39,7 @@ def run_compression(
     data: np.ndarray,
     use_quantum: bool = True,
     *,
+    use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
 ) -> dict:
@@ -51,6 +57,19 @@ def run_compression(
             )
             weights = qae.train(data[:10], steps=50)
             compressed = qae.encode(data, weights)
+
+            if use_denoiser:
+                if TORCH_AVAILABLE:
+                    denoiser = LatentDenoiser(latent_qubits)
+                    denoiser.train_denoiser(compressed)
+                    compressed = [
+                        denoiser(
+                            torch.tensor(vec, dtype=torch.float32)
+                        ).detach().cpu().numpy().tolist()
+                        for vec in compressed
+                    ]
+                else:
+                    logger.warning("PyTorch not available; skipping denoiser")
             q_loss = qae.cost_fn(weights, data[:10])
 
             classical = ClassicalCompressor(n_components=latent_qubits)
