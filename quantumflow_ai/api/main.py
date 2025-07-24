@@ -21,7 +21,6 @@ app.add_middleware(
 app.include_router(q_router)
 app.include_router(energy_router)
 
-
 # ✅ New: Q-Compression Upload Endpoint
 @app.post("/q-compression/upload")
 async def compress_upload(
@@ -30,8 +29,6 @@ async def compress_upload(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
-    use_dropout: bool = False,
-    dropout_prob: float = 0.0,
 ):
     try:
         data = read_csv_as_array(file)
@@ -41,8 +38,6 @@ async def compress_upload(
             use_denoiser=use_denoiser,
             noise=noise,
             noise_level=noise_level,
-            use_dropout=use_dropout,
-            dropout_prob=dropout_prob,
         )
         return JSONResponse(content=result)
     except Exception as e:
@@ -50,8 +45,4 @@ async def compress_upload(
 
 
 # ✅ Serve frontend (mounted last so API routes take precedence)
-app.mount(
-    "/",
-    StaticFiles(directory="quantumflow_ai/frontend/public", html=True),
-    name="static",
-)
+app.mount("/", StaticFiles(directory="quantumflow_ai/frontend/public", html=True), name="static")

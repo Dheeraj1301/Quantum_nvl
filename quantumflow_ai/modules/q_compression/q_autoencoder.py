@@ -3,7 +3,6 @@
 try:
     import pennylane as qml
     from pennylane import numpy as np
-
     PENNYLANE_AVAILABLE = True
 except Exception:  # pragma: no cover - optional dependency
     qml = None  # type: ignore
@@ -12,7 +11,6 @@ except Exception:  # pragma: no cover - optional dependency
 
 try:
     import torch
-
     TORCH_AVAILABLE = True
 except Exception:  # pragma: no cover - optional dependency
     torch = None  # type: ignore
@@ -24,7 +22,6 @@ from quantumflow_ai.core.config import set_global_seed
 
 logger = get_logger("QuantumAutoencoder")
 
-
 class QuantumAutoencoder:
     def __init__(
         self,
@@ -34,31 +31,7 @@ class QuantumAutoencoder:
         *,
         noise: bool = False,
         noise_level: float = 0.0,
-        use_dropout: bool = False,
-        dropout_prob: float = 0.0,
     ):
-        """Create a new quantum autoencoder instance.
-
-        Parameters
-        ----------
-        n_qubits:
-            Number of qubits used for the circuit.
-        latent_qubits:
-            Number of qubits kept after compression.
-        seed:
-            Optional random seed for reproducibility.
-        noise:
-            Whether to inject depolarizing noise after each layer.
-        noise_level:
-            Strength of the injected noise (0-0.3).
-        use_dropout:
-            Enable stochastic layer dropout. When ``True`` each entangling layer
-            is skipped with probability ``dropout_prob``.
-        dropout_prob:
-            Probability of dropping an entangling layer when ``use_dropout`` is
-            enabled.
-        """
-
         if not PENNYLANE_AVAILABLE:
             raise RuntimeError("PennyLane is required for QuantumAutoencoder")
 
@@ -69,8 +42,6 @@ class QuantumAutoencoder:
         self.noise = noise
         # Clamp noise level to a sane range so a noisy frontend cannot break the circuit
         self.noise_level = max(0.0, min(noise_level, 0.3))
-        self.use_dropout = use_dropout
-        self.dropout_prob = max(0.0, min(dropout_prob, 1.0))
         if noise and self.noise_level > 0:
             # default.qubit does not support noisy operations. Switch to a
             # noise-capable device when noise injection is requested.
@@ -82,19 +53,14 @@ class QuantumAutoencoder:
     def _circuit(self, inputs, weights):
         qml.templates.AngleEmbedding(inputs, wires=range(self.n_qubits))
 
-        if self.noise and self.noise_level > 0 or self.use_dropout:
-            # Apply each entangling layer individually so noise or dropout can be injected
+        if self.noise and self.noise_level > 0:
+            # Apply each entangling layer separately so noise can be injected
             for idx in range(len(weights)):
-                if self.use_dropout and np.random.random() < self.dropout_prob:
-                    for i in range(self.n_qubits):
-                        qml.Identity(wires=i)
-                else:
-                    qml.templates.StronglyEntanglingLayers(
-                        weights[idx : idx + 1], wires=range(self.n_qubits)
-                    )
-                if self.noise and self.noise_level > 0:
-                    for i in range(self.n_qubits):
-                        qml.DepolarizingChannel(self.noise_level, wires=i)
+                qml.templates.StronglyEntanglingLayers(
+                    weights[idx : idx + 1], wires=range(self.n_qubits)
+                )
+                for i in range(self.n_qubits):
+                    qml.DepolarizingChannel(self.noise_level, wires=i)
         else:
             qml.templates.StronglyEntanglingLayers(weights, wires=range(self.n_qubits))
 
@@ -145,14 +111,15 @@ class QuantumAutoencoderTorch(
 ):  # pragma: no cover - optional
     """PyTorch wrapper around :class:`QuantumAutoencoder`."""
 
-    def __init__(self, qae: "QuantumAutoencoder", weights: np.ndarray):
+    def __init__(self, qae: 'QuantumAutoencoder', weights: np.ndarray):
         if not TORCH_AVAILABLE:
             raise RuntimeError("PyTorch is required for QuantumAutoencoderTorch")
         super().__init__()
         self.qae = qae
         self.weights = weights
 
-    def forward(self, x: "torch.Tensor"):  # type: ignore[name-defined]
+    def forward(self, x: 'torch.Tensor'):  # type: ignore[name-defined]
         return torch.tensor(
             self.qae.encode([x.detach().cpu().numpy()], self.weights)[0]
         )
+
