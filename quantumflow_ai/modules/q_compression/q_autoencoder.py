@@ -31,6 +31,8 @@ class QuantumAutoencoder:
         *,
         noise: bool = False,
         noise_level: float = 0.0,
+        use_dropout: bool = False,
+        dropout_prob: float = 0.0,
     ):
         if not PENNYLANE_AVAILABLE:
             raise RuntimeError("PennyLane is required for QuantumAutoencoder")
@@ -42,6 +44,8 @@ class QuantumAutoencoder:
         self.noise = noise
         # Clamp noise level to a sane range so a noisy frontend cannot break the circuit
         self.noise_level = max(0.0, min(noise_level, 0.3))
+        self.use_dropout = use_dropout
+        self.dropout_prob = max(0.0, min(dropout_prob, 1.0))
         if noise and self.noise_level > 0:
             # default.qubit does not support noisy operations. Switch to a
             # noise-capable device when noise injection is requested.
@@ -53,14 +57,19 @@ class QuantumAutoencoder:
     def _circuit(self, inputs, weights):
         qml.templates.AngleEmbedding(inputs, wires=range(self.n_qubits))
 
-        if self.noise and self.noise_level > 0:
-            # Apply each entangling layer separately so noise can be injected
+        if self.noise and self.noise_level > 0 or self.use_dropout:
+            # Apply each entangling layer individually so noise or dropout can be injected
             for idx in range(len(weights)):
-                qml.templates.StronglyEntanglingLayers(
-                    weights[idx : idx + 1], wires=range(self.n_qubits)
-                )
-                for i in range(self.n_qubits):
-                    qml.DepolarizingChannel(self.noise_level, wires=i)
+                if self.use_dropout and np.random.random() < self.dropout_prob:
+                    for i in range(self.n_qubits):
+                        qml.Identity(wires=i)
+                else:
+                    qml.templates.StronglyEntanglingLayers(
+                        weights[idx : idx + 1], wires=range(self.n_qubits)
+                    )
+                if self.noise and self.noise_level > 0:
+                    for i in range(self.n_qubits):
+                        qml.DepolarizingChannel(self.noise_level, wires=i)
         else:
             qml.templates.StronglyEntanglingLayers(weights, wires=range(self.n_qubits))
 
