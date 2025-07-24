@@ -9,7 +9,7 @@ from quantumflow_ai.api.compressor import read_csv_as_array, run_compression
 
 app = FastAPI()
 
-# CORS Middleware for all origins
+# ✅ CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,11 +17,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Add routers
+# ✅ Include routers
 app.include_router(q_router)
 app.include_router(energy_router)
 
-# ✅ New: Q-Compression Upload Endpoint
+# ✅ Compression API Endpoint
 @app.post("/q-compression/upload")
 async def compress_upload(
     file: UploadFile = File(...),
@@ -40,11 +40,12 @@ async def compress_upload(
             use_denoiser=use_denoiser,
             noise=noise,
             noise_level=noise_level,
+            use_dropout=use_dropout,
+            dropout_prob=dropout_prob,
         )
         return JSONResponse(content=result)
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
 
-
-# ✅ Serve frontend (mounted last so API routes take precedence)
+# ✅ Serve frontend (after API routes)
 app.mount("/", StaticFiles(directory="quantumflow_ai/frontend/public", html=True), name="static")
