@@ -50,11 +50,14 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
       body: formData
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      throw new Error(`Server returned ${response.status}`);
+      const message = result.error || response.statusText || response.status;
+      output.textContent = `Error ${response.status}: ${message}`;
+      return;
     }
 
-    const result = await response.json();
     output.textContent = JSON.stringify(result, null, 2);
   } catch (err) {
     output.textContent = `Error: ${err.message}`;
