@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>QuantumFlow Routing</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="router.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>🚦 Quantum Routing UI</h1>
+    <h1>Quantum Routing Interface</h1>
 
     <form id="routingForm">
       <label for="experts">Expert IDs (comma-separated):</label>
@@ -16,7 +17,15 @@
       <label for="tokens">Token IDs (comma-separated):</label>
       <input type="text" id="tokens" placeholder="0,1,2,3" required />
 
-      <label><input type="checkbox" id="useQuantum" checked /> Use Quantum Routing</label>
+      <label>
+        <input type="checkbox" id="useQuantum" checked />
+        Use Quantum Routing
+      </label>
+
+      <label>
+        <input type="checkbox" id="useML" />
+        Use ML-based Routing
+      </label>
 
       <button type="submit">Run Routing</button>
     </form>
@@ -24,16 +33,23 @@
     <form id="fileForm">
       <label for="csvFile">Upload CSV File:</label>
       <input type="file" id="csvFile" accept=".csv" required />
-      <label><input type="checkbox" id="useQuantumFile" checked /> Use Quantum Routing</label>
+
+      <label>
+        <input type="checkbox" id="useQuantumFile" checked />
+        Use Quantum Routing
+      </label>
+
       <button type="submit">Upload & Route</button>
     </form>
 
     <button id="suggestButton" type="button">Get LSTM Suggestion</button>
-    <div id="suggestion" class="output-box"></div>
 
+    <div id="suggestion" class="output-box"></div>
     <div id="output" class="output-box"></div>
-    <a href="index.html">⬅️ Back to module selection</a>
+
+    <div class="center">
+      <a href="index.html" class="back-link">← Back to module selection</a>
+    </div>
   </div>
-  <script src="router.js"></script>
 </body>
 </html>

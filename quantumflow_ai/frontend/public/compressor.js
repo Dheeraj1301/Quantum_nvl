@@ -7,6 +7,11 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const noiseLevel = document.getElementById('noiseLevel').value;
   const output = document.getElementById('output');
 
+  if (!fileInput.files.length) {
+    output.textContent = "Please select a CSV file.";
+    return;
+  }
+
   const formData = new FormData();
   formData.append('file', fileInput.files[0]);
 

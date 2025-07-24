@@ -1,9 +1,7 @@
 (function () {
   function getEl(id) {
     const el = document.getElementById(id);
-    if (!el) {
-      console.warn(`⚠️ Element with id "${id}" not found.`);
-    }
+    if (!el) console.warn(`Element with id "${id}" not found.`);
     return el;
   }
 
@@ -11,7 +9,7 @@
     try {
       return JSON.parse(value);
     } catch (err) {
-      console.warn("⚠️ Invalid JSON. Returning fallback.", err);
+      console.warn("Invalid JSON. Using fallback.", err);
       return fallback;
     }
   }
@@ -20,35 +18,36 @@
     const form = getEl("energyForm");
     if (!form) return;
 
+    const quantumEl = getEl("useQuantum");
+    const mlEl = getEl("useML");
+
+    // Auto-disable conflicting checkboxes
+    if (quantumEl && mlEl) {
+      quantumEl.addEventListener("change", () => {
+        if (quantumEl.checked) mlEl.checked = false;
+      });
+      mlEl.addEventListener("change", () => {
+        if (mlEl.checked) quantumEl.checked = false;
+      });
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const jobGraph = parseJSON(getEl("jobGraph")?.value || "{}");
       const energyProfile = parseJSON(getEl("energyProfile")?.value || "{}");
 
-      // Safely access checkbox states. Older browsers or pages missing
-      // these elements may return null so we fall back to false.
-      const useQuantumEl = getEl("useQuantum");
-      const useQuantum = useQuantumEl ? useQuantumEl.checked : false;
-
-      const useMLEl = getEl("useML");
-      const useML = useMLEl ? useMLEl.checked : false;
-
-      const useHybridEl = getEl("useHybrid");
-      const useHybrid = useHybridEl ? useHybridEl.checked : false;
-
-      const useMetaEl = getEl("useMeta");
-      const useMeta = useMetaEl ? useMetaEl.checked : false;
-
-      const useGnnEl = getEl("useGnn");
-      const useGnn = useGnnEl ? useGnnEl.checked : false;
+      const useQuantum = quantumEl?.checked ?? false;
+      const useML = mlEl?.checked ?? false;
+      const useHybrid = getEl("useHybrid")?.checked ?? false;
+      const useMeta = getEl("useMeta")?.checked ?? false;
+      const useGnn = getEl("useGnn")?.checked ?? false;
 
       const maxEnergy = Number(getEl("maxEnergy")?.value || 100);
       const qIterations = Number(getEl("qIterations")?.value || 10);
       const learningRate = Number(getEl("learningRate")?.value || 0.01);
       const batchSize = Number(getEl("batchSize")?.value || 32);
 
-      // Validate numeric input ranges
       let warning = "";
       if (isNaN(maxEnergy) || maxEnergy < 1 || maxEnergy > 1000) {
         warning = "Max Energy Limit must be between 1 and 1000.";
@@ -68,7 +67,6 @@
         warningEl.textContent = "";
       }
 
-      // Construct payload
       const payload = {
         job_graph: jobGraph,
         energy_profile: energyProfile,
@@ -101,7 +99,6 @@
     });
   }
 
-  // Run init after DOM is loaded
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {

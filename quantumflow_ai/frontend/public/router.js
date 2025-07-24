@@ -1,4 +1,4 @@
-/// router.js
+// router.js
 
 document.getElementById("routingForm").addEventListener("submit", function (e) {
   e.preventDefault();
@@ -98,7 +98,7 @@ function analyzeRouting(assignments, numExperts) {
   const underused = expertCount.map((c, i) => c < avg * 0.5 ? i : null).filter(x => x !== null);
 
   const insights = `
-    <h4>📊 Routing Analysis</h4>
+    <h4>Routing Analysis</h4>
     <ul>
       <li><strong>Max Load:</strong> ${maxLoad}</li>
       <li><strong>Min Load:</strong> ${minLoad}</li>
@@ -133,3 +133,16 @@ document.getElementById("suggestButton").addEventListener("click", function () {
       document.getElementById("suggestion").innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
     });
 });
+
+// Safe switch logic between Quantum and ML routing
+const quantumCheckbox = document.getElementById("useQuantum");
+const mlCheckbox = document.getElementById("useML");
+
+if (quantumCheckbox && mlCheckbox) {
+  quantumCheckbox.addEventListener("change", () => {
+    if (quantumCheckbox.checked) mlCheckbox.checked = false;
+  });
+  mlCheckbox.addEventListener("change", () => {
+    if (mlCheckbox.checked) quantumCheckbox.checked = false;
+  });
+}
