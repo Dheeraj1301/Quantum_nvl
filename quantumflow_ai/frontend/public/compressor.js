@@ -16,6 +16,9 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const denoiseEl = document.getElementById('denoiseToggle');
   const denoise = denoiseEl ? denoiseEl.checked : false;
 
+  const predictEl = document.getElementById('predictToggle');
+  const predict = predictEl ? predictEl.checked : false;
+
   const output = document.getElementById('output');
 
   if (!fileInput.files.length) {
@@ -36,7 +39,7 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   });
 
   try {
-    const response = await fetch(`/q-compression/upload?${queryParams.toString()}`, {
+    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&predict_first=${predict}`, {
       method: 'POST',
       body: formData
     });
