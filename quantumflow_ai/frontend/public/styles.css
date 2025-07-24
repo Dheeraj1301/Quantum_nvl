@@ -1,61 +1,68 @@
-/* styles.css — Dark NVIDIA Theme */
+/* NVIDIA-Inspired Full Black Theme for QuantumFlow */
 
-body {
+html, body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #0a0a0a !important;
+  background-color: #000000 !important;
+  color: #c8ffc8;
   margin: 0;
   padding: 2rem;
-  color: #c4ffc4;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 850px;
   margin: auto;
-  background-color: #1a1a1a;
+  background-color: #121212;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 0 30px rgba(0, 255, 100, 0.15);
-  color: #e0ffe0;
+  box-shadow: 0 0 30px rgba(0, 255, 100, 0.12);
+  color: #e6ffe6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
   color: #00ff66;
+  margin-top: 0;
 }
 
 label {
-  color: #aaffaa;
-  display: block;
   font-weight: 600;
-  margin-top: 1rem;
+  color: #a0fba0;
+  display: block;
+  margin-top: 1.2rem;
 }
 
 input[type="text"],
+input[type="number"],
 input[type="file"],
+input[type="range"],
 textarea,
 button {
   width: 100%;
   padding: 0.75rem;
-  margin: 0.4rem 0 1.2rem;
-  background-color: #2a2a2a;
-  color: #e0ffe0;
+  margin: 0.4rem 0 1rem;
+  background-color: #222;
+  color: #e6ffe6;
   border: 1px solid #444;
   border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
 }
 
+textarea {
+  resize: vertical;
+}
+
 input[type="checkbox"] {
-  transform: scale(1.2);
   margin-right: 0.5rem;
+  transform: scale(1.1);
 }
 
 button {
   background-color: #00cc66;
-  color: #000;
+  color: #000000;
   font-weight: bold;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 button:hover {
@@ -63,15 +70,15 @@ button:hover {
   transform: scale(1.02);
 }
 
-.output-box {
-  background-color: #121212;
-  padding: 1rem;
-  margin-top: 2rem;
+.output-box, .result {
+  margin-top: 1.5rem;
+  background-color: #181818;
+  color: #d6ffd6;
   border: 1px solid #00cc66;
+  padding: 1rem;
   border-radius: 10px;
   font-family: monospace;
   white-space: pre-wrap;
-  color: #ccffcc;
 }
 
 .back-link {
@@ -85,6 +92,10 @@ button:hover {
   text-decoration: underline;
 }
 
+.center {
+  text-align: center;
+}
+
 .button-row {
   display: flex;
   gap: 1.5rem;
@@ -92,11 +103,7 @@ button:hover {
   margin-top: 2rem;
 }
 
-.center {
-  text-align: center;
-}
-
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .button-row {
     flex-direction: column;
     gap: 1rem;

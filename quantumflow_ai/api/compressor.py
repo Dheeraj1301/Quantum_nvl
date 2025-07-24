@@ -4,36 +4,32 @@ import numpy as np
 from quantumflow_ai.modules.q_compression.q_autoencoder import QuantumAutoencoder
 from quantumflow_ai.modules.q_compression.classical_compressor import ClassicalCompressor
 from quantumflow_ai.modules.q_compression.denoiser import LatentDenoiser, TORCH_AVAILABLE
+
 try:
     import torch
-except Exception:  # pragma: no cover - optional dependency
+except Exception:
     torch = None  # type: ignore
+
 from quantumflow_ai.core.logger import get_logger
 
 logger = get_logger("CompressorAPI")
 
+
 def read_csv_as_array(file: UploadFile) -> np.ndarray:
-    """Load an uploaded CSV into a numeric numpy array.
-
-    The old implementation would fail with a generic error message whenever
-    ``pandas.read_csv`` raised an exception. This function now performs some
-    additional validation and provides more helpful errors for the API
-    consumer.
-    """
-
+    """Load an uploaded CSV into a numeric numpy array with error handling."""
     try:
         df = pd.read_csv(file.file)
-    except Exception as e:  # pragma: no cover - malformed CSV
+    except Exception as e:
         logger.error(f"[Compressor] Error reading file: {e}")
         raise ValueError("Invalid CSV file format.")
 
-    # Only keep numeric columns so stray strings don't break the compressor
     data = df.select_dtypes(include=[np.number]).to_numpy()
     if data.size == 0:
         raise ValueError("CSV does not contain numeric data.")
 
     logger.info(f"[Compressor] Loaded data shape: {data.shape}")
     return data
+
 
 def run_compression(
     data: np.ndarray,
@@ -42,10 +38,14 @@ def run_compression(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
+    use_dropout: bool = False,
+    dropout_prob: float = 0.0,
 ) -> dict:
     latent_qubits = 4
 
+    # Clip to safe ranges
     noise_level = max(0.0, min(noise_level, 0.3))
+    dropout_prob = max(0.0, min(dropout_prob, 1.0))
 
     if use_quantum:
         try:
@@ -54,6 +54,8 @@ def run_compression(
                 latent_qubits=latent_qubits,
                 noise=noise,
                 noise_level=noise_level,
+                use_dropout=use_dropout,
+                dropout_prob=dropout_prob,
             )
             weights = qae.train(data[:10], steps=50)
             compressed = qae.encode(data, weights)
@@ -70,6 +72,7 @@ def run_compression(
                     ]
                 else:
                     logger.warning("PyTorch not available; skipping denoiser")
+
             q_loss = qae.cost_fn(weights, data[:10])
 
             classical = ClassicalCompressor(n_components=latent_qubits)
@@ -90,10 +93,8 @@ def run_compression(
                 "compression_ratio": compression_ratio,
                 "compressed_vectors": [list(vec) for vec in compressed],
             }
-        
+
         except Exception:
-            # If quantum compression fails (e.g. optional deps missing),
-            # fall back to classical compression so the API still succeeds.
             logger.exception("Quantum compression failed; using classical fallback")
 
     classical = ClassicalCompressor(n_components=latent_qubits)
