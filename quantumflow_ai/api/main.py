@@ -27,6 +27,7 @@ app.include_router(energy_router)
 async def compress_upload(
     file: UploadFile = File(...),
     use_quantum: bool = True,
+    use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
     use_dropout: bool = False,
@@ -37,6 +38,7 @@ async def compress_upload(
         result = run_compression(
             data,
             use_quantum=use_quantum,
+            use_denoiser=use_denoiser,
             noise=noise,
             noise_level=noise_level,
             use_dropout=use_dropout,
