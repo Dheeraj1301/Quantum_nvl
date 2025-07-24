@@ -2,12 +2,20 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   e.preventDefault();
 
   const fileInput = document.getElementById('fileInput');
-  const useQuantum = document.getElementById('quantumToggle').checked;
-  const noise = document.getElementById('noiseToggle').checked;
-  const noiseLevel = document.getElementById('noiseLevel').value;
-  const useDropout = document.getElementById('dropoutToggle').checked;
-  const dropoutProb = document.getElementById('dropoutProb').value;
-  const denoise = document.getElementById('denoiseToggle').checked;
+
+  // Gracefully handle optional toggles that may not exist yet
+  const useQuantumEl = document.getElementById('quantumToggle');
+  const useQuantum = useQuantumEl ? useQuantumEl.checked : false;
+
+  const noiseEl = document.getElementById('noiseToggle');
+  const noise = noiseEl ? noiseEl.checked : false;
+
+  const noiseLevelEl = document.getElementById('noiseLevel');
+  const noiseLevel = noiseLevelEl ? noiseLevelEl.value : 0;
+
+  const denoiseEl = document.getElementById('denoiseToggle');
+  const denoise = denoiseEl ? denoiseEl.checked : false;
+
   const output = document.getElementById('output');
 
   if (!fileInput.files.length) {
