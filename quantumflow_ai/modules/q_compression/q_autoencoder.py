@@ -23,7 +23,15 @@ from quantumflow_ai.core.config import set_global_seed
 logger = get_logger("QuantumAutoencoder")
 
 class QuantumAutoencoder:
-    def __init__(self, n_qubits: int, latent_qubits: int, seed: int | None = 42):
+    def __init__(
+        self,
+        n_qubits: int,
+        latent_qubits: int,
+        seed: int | None = 42,
+        *,
+        noise: bool = False,
+        noise_level: float = 0.0,
+    ):
         if not PENNYLANE_AVAILABLE:
             raise RuntimeError("PennyLane is required for QuantumAutoencoder")
 
@@ -31,12 +39,26 @@ class QuantumAutoencoder:
 
         self.n_qubits = n_qubits
         self.latent_qubits = latent_qubits
+        self.noise = noise
+        # Clamp noise level to a sane range so a noisy frontend cannot break the circuit
+        self.noise_level = max(0.0, min(noise_level, 0.3))
         self.device = get_quantum_device(wires=n_qubits)
         self.qnode = qml.QNode(self._circuit, self.device, interface="autograd")
 
     def _circuit(self, inputs, weights):
         qml.templates.AngleEmbedding(inputs, wires=range(self.n_qubits))
-        qml.templates.StronglyEntanglingLayers(weights, wires=range(self.n_qubits))
+
+        if self.noise:
+            # Apply each entangling layer separately so noise can be injected
+            for idx in range(len(weights)):
+                qml.templates.StronglyEntanglingLayers(
+                    weights[idx : idx + 1], wires=range(self.n_qubits)
+                )
+                for i in range(self.n_qubits):
+                    qml.DepolarizingChannel(self.noise_level, wires=i)
+        else:
+            qml.templates.StronglyEntanglingLayers(weights, wires=range(self.n_qubits))
+
         return [qml.expval(qml.PauliZ(i)) for i in range(self.latent_qubits)]
 
     def cost_fn(self, weights: np.ndarray, inputs: list[np.ndarray]):
@@ -62,28 +84,3 @@ class QuantumAutoencoder:
                 logger.info(f"[QAE-{config_hash}] Step {i}: Loss = {loss:.4f}")
         return weights
 
-    def encode(self, inputs: list[np.ndarray], weights: np.ndarray):
-        encoded = []
-        for x in inputs:
-            output = np.asarray(self.qnode(x, weights))
-            encoded.append(output.tolist())
-        return encoded
-
-    def save_weights(self, weights: np.ndarray, path: str):
-        np.save(path, weights)
-
-    def load_weights(self, path: str) -> np.ndarray:
-        return np.load(path)
-
-class QuantumAutoencoderTorch(
-    torch.nn.Module if TORCH_AVAILABLE else object
-):  # pragma: no cover - optional
-    def __init__(self, qae: QuantumAutoencoder, weights):
-        if not TORCH_AVAILABLE:
-            raise RuntimeError("PyTorch is required for QuantumAutoencoderTorch")
-        super().__init__()
-        self.qae = qae
-        self.weights = weights
-
-    def forward(self, x: 'torch.Tensor'):  # type: ignore[name-defined]
-        return torch.tensor(self.qae.encode([x.detach().cpu().numpy()], self.weights)[0])

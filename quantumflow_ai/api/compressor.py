@@ -30,12 +30,25 @@ def read_csv_as_array(file: UploadFile) -> np.ndarray:
     logger.info(f"[Compressor] Loaded data shape: {data.shape}")
     return data
 
-def run_compression(data: np.ndarray, use_quantum: bool = True) -> dict:
+def run_compression(
+    data: np.ndarray,
+    use_quantum: bool = True,
+    *,
+    noise: bool = False,
+    noise_level: float = 0.0,
+) -> dict:
     latent_qubits = 4
+
+    noise_level = max(0.0, min(noise_level, 0.3))
 
     if use_quantum:
         try:
-            qae = QuantumAutoencoder(n_qubits=data.shape[1], latent_qubits=latent_qubits)
+            qae = QuantumAutoencoder(
+                n_qubits=data.shape[1],
+                latent_qubits=latent_qubits,
+                noise=noise,
+                noise_level=noise_level,
+            )
             weights = qae.train(data[:10], steps=50)
             compressed = qae.encode(data, weights)
             q_loss = qae.cost_fn(weights, data[:10])
@@ -58,6 +71,7 @@ def run_compression(data: np.ndarray, use_quantum: bool = True) -> dict:
                 "compression_ratio": compression_ratio,
                 "compressed_vectors": [list(vec) for vec in compressed],
             }
+        
         except Exception:
             # If quantum compression fails (e.g. optional deps missing),
             # fall back to classical compression so the API still succeeds.
