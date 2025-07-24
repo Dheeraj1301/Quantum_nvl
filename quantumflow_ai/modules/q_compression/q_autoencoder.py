@@ -42,9 +42,13 @@ class QuantumAutoencoder:
     def cost_fn(self, weights: np.ndarray, inputs: list[np.ndarray]):
         loss = 0.0
         for x in inputs:
-            output = self.qnode(x, weights)
-            assert output.shape == (self.latent_qubits,)
-            loss += np.sum((x[:self.latent_qubits] - output)**2)
+            output = np.asarray(self.qnode(x, weights))
+            if output.shape != (self.latent_qubits,):
+                raise ValueError(
+                    f"Unexpected qnode output shape {output.shape};"
+                    f" expected ({self.latent_qubits},)"
+                )
+            loss += np.sum((x[: self.latent_qubits] - output) ** 2)
         return loss / len(inputs)
 
     def train(self, inputs: list[np.ndarray], steps: int = 100, lr: float = 0.1):
@@ -59,7 +63,11 @@ class QuantumAutoencoder:
         return weights
 
     def encode(self, inputs: list[np.ndarray], weights: np.ndarray):
-        return [self.qnode(x, weights).tolist() for x in inputs]
+        encoded = []
+        for x in inputs:
+            output = np.asarray(self.qnode(x, weights))
+            encoded.append(output.tolist())
+        return encoded
 
     def save_weights(self, weights: np.ndarray, path: str):
         np.save(path, weights)
