@@ -3,7 +3,6 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
 
   const fileInput = document.getElementById('fileInput');
 
-  // Gracefully handle optional toggles that may not exist yet
   const useQuantumEl = document.getElementById('quantumToggle');
   const useQuantum = useQuantumEl ? useQuantumEl.checked : false;
 
@@ -22,6 +21,9 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const denoiseEl = document.getElementById('denoiseToggle');
   const denoise = denoiseEl ? denoiseEl.checked : false;
 
+  const pruneEl = document.getElementById('pruneToggle');
+  const prune = pruneEl ? pruneEl.checked : false;
+
   const output = document.getElementById('output');
 
   if (!fileInput.files.length) {
@@ -33,13 +35,20 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   formData.append('file', fileInput.files[0]);
 
   try {
-    const response = await fetch(
-      `/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&use_dropout=${useDropout}&dropout_prob=${dropoutProb}`,
-      {
-        method: 'POST',
-        body: formData,
-      }
-    );
+    const query = new URLSearchParams({
+      use_quantum: useQuantum,
+      use_denoiser: denoise,
+      noise: noise,
+      noise_level: noiseLevel,
+      use_dropout: useDropout,
+      dropout_prob: dropoutProb,
+      enable_pruning: prune
+    });
+
+    const response = await fetch(`/q-compression/upload?${query.toString()}`, {
+      method: 'POST',
+      body: formData
+    });
 
     if (!response.ok) {
       throw new Error(`Server returned ${response.status}`);

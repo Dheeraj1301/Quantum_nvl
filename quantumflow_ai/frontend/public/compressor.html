@@ -34,6 +34,11 @@
         Denoise Latent Output
       </label>
 
+      <label>
+        <input type="checkbox" id="pruneToggle" />
+        Enable Qubit Pruning
+      </label>
+
       <label for="noiseLevel">Noise Level:</label>
       <input type="range" id="noiseLevel" min="0" max="0.3" step="0.01" value="0" oninput="noiseValue.textContent = this.value" />
       <span id="noiseValue" style="color: #aaffaa;">0</span>
