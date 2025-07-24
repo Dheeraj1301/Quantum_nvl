@@ -128,6 +128,8 @@ def run_compression(
                 latent_qubits=latent_qubits,
                 noise=noise,
                 noise_level=noise_level,
+                use_dropout=use_dropout,
+                dropout_prob=dropout_prob,
             )
             weights = qae.train(data[:10], steps=50)
             compressed = qae.encode(data, weights)
