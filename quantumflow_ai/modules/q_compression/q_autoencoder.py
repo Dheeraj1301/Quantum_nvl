@@ -97,6 +97,33 @@ class QuantumAutoencoder:
             encoded.append(output.tolist())
         return encoded
 
+    def prune_qubits(
+        self,
+        encoded: list[list[float]] | list[np.ndarray],
+        *,
+        threshold: float = 0.01,
+    ) -> tuple[list[int], list[list[float]]]:
+        """Prune output qubits with variance below ``threshold``.
+
+        Parameters
+        ----------
+        encoded:
+            Encoded latent vectors returned by :func:`encode`.
+        threshold:
+            Minimum variance required to keep a qubit.
+
+        Returns
+        -------
+        tuple
+            Indices of qubits kept and the pruned encoded vectors.
+        """
+
+        arr = np.asarray(encoded)
+        variances = np.var(arr, axis=0)
+        keep = [i for i, var in enumerate(variances) if var >= threshold]
+        pruned = arr[:, keep]
+        return keep, pruned.tolist()
+
     def save_weights(self, weights: np.ndarray, path: str) -> None:
         """Persist trained weights to ``path``."""
         np.save(path, weights)
