@@ -5,7 +5,11 @@ from fastapi.responses import JSONResponse
 
 from quantumflow_ai.api.q_router import router as q_router
 from quantumflow_ai.api.energy import router as energy_router
-from quantumflow_ai.api.compressor import read_csv_as_array, run_compression
+from quantumflow_ai.api.compressor import (
+    read_csv_as_array,
+    run_compression,
+    validate_compression_config,
+)
 
 app = FastAPI()
 
@@ -34,21 +38,28 @@ async def compress_upload(
     enable_pruning: bool = False,
     pruning_threshold: float = 0.01,
     predict_first: bool = False,
+    compression_mode: str = "qml",
+    predict_compressibility: bool = False,
 ):
     try:
         data = read_csv_as_array(file)
-        result = run_compression(
-            data,
-            use_quantum=use_quantum,
-            use_denoiser=use_denoiser,
-            noise=noise,
-            noise_level=noise_level,
-            use_dropout=use_dropout,
-            dropout_prob=dropout_prob,
-            enable_pruning=enable_pruning,
-            pruning_threshold=pruning_threshold,
-            predict_first=predict_first,
+        config = validate_compression_config(
+            {
+                "use_quantum": use_quantum,
+                "use_denoiser": use_denoiser,
+                "noise": noise,
+                "noise_level": noise_level,
+                "use_dropout": use_dropout,
+                "dropout_prob": dropout_prob,
+                "enable_pruning": enable_pruning,
+                "pruning_threshold": pruning_threshold,
+                "predict_first": predict_first,
+                "compression_mode": compression_mode,
+                "predict_compressibility": predict_compressibility,
+            }
         )
+
+        result = run_compression(data, config=config)
         return JSONResponse(content=result)
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})

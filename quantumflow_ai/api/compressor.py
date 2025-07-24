@@ -16,6 +16,32 @@ from quantumflow_ai.core.logger import get_logger
 logger = get_logger("CompressorAPI")
 
 
+def validate_compression_config(config: dict) -> dict:
+    """Sanitize compression settings and resolve conflicting modes."""
+    cfg = config.copy()
+
+    compression_mode = cfg.get("compression_mode", "qml")
+
+    if compression_mode == "hybrid":
+        if cfg.get("use_denoiser"):
+            logger.info("Switched off use_denoiser due to hybrid mode")
+            cfg["use_denoiser"] = False
+        if cfg.get("use_dropout"):
+            logger.info("Switched off use_dropout due to hybrid mode")
+            cfg["use_dropout"] = False
+
+    if cfg.get("enable_pruning") and compression_mode != "qml":
+        logger.info("enable_pruning forces compression_mode to 'qml'")
+        cfg["compression_mode"] = "qml"
+
+    if cfg.get("predict_compressibility"):
+        # Ensure classification is triggered first
+        if not cfg.get("predict_first"):
+            logger.info("predict_compressibility enabled; running classifier before compression")
+            cfg["predict_first"] = True
+
+    return cfg
+
 def read_csv_as_array(file: UploadFile) -> np.ndarray:
     """Load an uploaded CSV into a numeric numpy array."""
     try:
@@ -37,12 +63,38 @@ def run_compression(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
+    use_dropout: bool = False,
+    dropout_prob: float = 0.0,
     enable_pruning: bool = False,
     pruning_threshold: float = 0.01,
     predict_first: bool = False,
+    predict_compressibility: bool = False,
+    compression_mode: str = "qml",
+    config: dict | None = None,
 ) -> dict:
+    if config:
+        use_quantum = config.get("use_quantum", use_quantum)
+        use_denoiser = config.get("use_denoiser", use_denoiser)
+        noise = config.get("noise", noise)
+        noise_level = config.get("noise_level", noise_level)
+        use_dropout = config.get("use_dropout", use_dropout)
+        dropout_prob = config.get("dropout_prob", dropout_prob)
+        enable_pruning = config.get("enable_pruning", enable_pruning)
+        pruning_threshold = config.get("pruning_threshold", pruning_threshold)
+        predict_first = config.get("predict_first", predict_first)
+        predict_compressibility = config.get("predict_compressibility", predict_compressibility)
+        compression_mode = config.get("compression_mode", compression_mode)
+
     latent_qubits = 4
     noise_level = max(0.0, min(noise_level, 0.3))
+
+    if compression_mode == "classical":
+        use_quantum = False
+    elif compression_mode in {"qml", "hybrid"}:
+        use_quantum = True
+
+    if predict_compressibility and not predict_first:
+        predict_first = True
 
     predictions = None
 
@@ -61,6 +113,13 @@ def run_compression(
         except Exception:
             logger.exception("VQC training failed; falling back to threshold labels")
             predictions = labels.tolist()
+
+        if predict_compressibility and any(p == 0 for p in predictions):
+            logger.info("[Compressor] Data deemed not compressible; skipping compression")
+            return {
+                "mode": "classification",
+                "predictions": predictions,
+            }
 
     # Quantum compression
     if use_quantum:
