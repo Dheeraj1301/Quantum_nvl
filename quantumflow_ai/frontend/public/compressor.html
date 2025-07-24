@@ -38,6 +38,15 @@
       <input type="range" id="noiseLevel" min="0" max="0.3" step="0.01" value="0" oninput="noiseValue.textContent = this.value" />
       <span id="noiseValue" style="color: #aaffaa;">0</span>
 
+      <label>
+        <input type="checkbox" id="dropoutToggle" />
+        Use Dropout
+      </label>
+
+      <label for="dropoutProb">Dropout Prob:</label>
+      <input type="range" id="dropoutProb" min="0" max="1" step="0.05" value="0" oninput="dropoutValue.textContent = this.value" />
+      <span id="dropoutValue" style="color: #aaffaa;">0</span>
+
       <button type="submit">Compress</button>
     </form>
 
