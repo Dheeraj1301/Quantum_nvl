@@ -13,11 +13,14 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const noiseLevelEl = document.getElementById('noiseLevel');
   const noiseLevel = noiseLevelEl ? noiseLevelEl.value : 0;
 
+  const dropoutToggle = document.getElementById('dropoutToggle');
+  const useDropout = dropoutToggle ? dropoutToggle.checked : false;
+
+  const dropoutProbEl = document.getElementById('dropoutProb');
+  const dropoutProb = dropoutProbEl ? dropoutProbEl.value : 0;
+
   const denoiseEl = document.getElementById('denoiseToggle');
   const denoise = denoiseEl ? denoiseEl.checked : false;
-
-  const predictEl = document.getElementById('predictToggle');
-  const predict = predictEl ? predictEl.checked : false;
 
   const output = document.getElementById('output');
 
@@ -39,10 +42,13 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   });
 
   try {
-    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&predict_first=${predict}`, {
-      method: 'POST',
-      body: formData
-    });
+    const response = await fetch(
+      `/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&use_dropout=${useDropout}&dropout_prob=${dropoutProb}`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Server returned ${response.status}`);
