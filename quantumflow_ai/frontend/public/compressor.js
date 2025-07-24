@@ -13,6 +13,13 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const noiseLevelEl = document.getElementById('noiseLevel');
   const noiseLevel = noiseLevelEl ? noiseLevelEl.value : 0;
 
+  // Optional dropout toggle
+  const dropoutToggle = document.getElementById('dropoutToggle');
+  const useDropout = dropoutToggle ? dropoutToggle.checked : false;
+
+  const dropoutProbEl = document.getElementById('dropoutProb');
+  const dropoutProb = dropoutProbEl ? dropoutProbEl.value : 0;
+
   const denoiseEl = document.getElementById('denoiseToggle');
   const denoise = denoiseEl ? denoiseEl.checked : false;
 
@@ -27,7 +34,9 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   formData.append('file', fileInput.files[0]);
 
   try {
-    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}`, {
+    const response = await fetch(
+      `/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&use_dropout=${useDropout}&dropout_prob=${dropoutProb}`,
+      {
       method: 'POST',
       body: formData
     });

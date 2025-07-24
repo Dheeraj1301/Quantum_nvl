@@ -29,6 +29,8 @@ async def compress_upload(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
+    use_dropout: bool = False,
+    dropout_prob: float = 0.0,
 ):
     try:
         data = read_csv_as_array(file)
