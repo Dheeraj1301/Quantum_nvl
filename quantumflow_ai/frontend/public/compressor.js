@@ -5,6 +5,7 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const useQuantum = document.getElementById('quantumToggle').checked;
   const noise = document.getElementById('noiseToggle').checked;
   const noiseLevel = document.getElementById('noiseLevel').value;
+  const denoise = document.getElementById('denoiseToggle').checked;
   const output = document.getElementById('output');
 
   if (!fileInput.files.length) {
@@ -16,7 +17,7 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   formData.append('file', fileInput.files[0]);
 
   try {
-    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&noise=${noise}&noise_level=${noiseLevel}`, {
+    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}`, {
       method: 'POST',
       body: formData
     });
