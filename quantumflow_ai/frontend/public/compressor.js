@@ -16,6 +16,9 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   const denoiseEl = document.getElementById('denoiseToggle');
   const denoise = denoiseEl ? denoiseEl.checked : false;
 
+  const pruneEl = document.getElementById('pruneToggle');
+  const prune = pruneEl ? pruneEl.checked : false;
+
   const output = document.getElementById('output');
 
   if (!fileInput.files.length) {
@@ -27,7 +30,7 @@ document.getElementById('compressForm').addEventListener('submit', async (e) => 
   formData.append('file', fileInput.files[0]);
 
   try {
-    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}`, {
+    const response = await fetch(`/q-compression/upload?use_quantum=${useQuantum}&use_denoiser=${denoise}&noise=${noise}&noise_level=${noiseLevel}&enable_pruning=${prune}`, {
       method: 'POST',
       body: formData
     });

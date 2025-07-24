@@ -42,6 +42,8 @@ def run_compression(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
+    enable_pruning: bool = False,
+    pruning_threshold: float = 0.01,
 ) -> dict:
     latent_qubits = 4
 
@@ -57,6 +59,12 @@ def run_compression(
             )
             weights = qae.train(data[:10], steps=50)
             compressed = qae.encode(data, weights)
+
+            kept_qubits: list[int] | None = None
+            if enable_pruning:
+                kept_qubits, compressed = qae.prune_qubits(
+                    compressed, threshold=pruning_threshold
+                )
 
             if use_denoiser:
                 if TORCH_AVAILABLE:
@@ -78,7 +86,8 @@ def run_compression(
                 (data - classical.inverse_transform(classical.transform(data))) ** 2
             )
 
-            compression_ratio = round(latent_qubits / data.shape[1], 3)
+            final_latent = len(kept_qubits) if kept_qubits is not None else latent_qubits
+            compression_ratio = round(final_latent / data.shape[1], 3)
             logger.info(
                 f"[Compressor] Quantum Loss: {q_loss:.4f}, PCA Loss: {pca_loss:.4f}, Ratio: {compression_ratio}"
             )
@@ -89,6 +98,7 @@ def run_compression(
                 "pca_loss": float(pca_loss),
                 "compression_ratio": compression_ratio,
                 "compressed_vectors": [list(vec) for vec in compressed],
+                "kept_qubits": kept_qubits,
             }
         
         except Exception:

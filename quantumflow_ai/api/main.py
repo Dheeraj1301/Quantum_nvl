@@ -29,6 +29,7 @@ async def compress_upload(
     use_denoiser: bool = False,
     noise: bool = False,
     noise_level: float = 0.0,
+    enable_pruning: bool = False,
 ):
     try:
         data = read_csv_as_array(file)
@@ -38,6 +39,7 @@ async def compress_upload(
             use_denoiser=use_denoiser,
             noise=noise,
             noise_level=noise_level,
+            enable_pruning=enable_pruning,
         )
         return JSONResponse(content=result)
     except Exception as e:
