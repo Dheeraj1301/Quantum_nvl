@@ -10,6 +10,7 @@ document.getElementById('decompressForm').addEventListener('submit', async (e) =
   formData.append("use_qft", document.getElementById("useQFT").checked);
   formData.append("learnable_qft", document.getElementById("learnableQFT").checked);
   formData.append("amplitude_estimate", document.getElementById("amplitudeEstimate").checked);
+  formData.append("use_qsvt", document.getElementById("useQSVT").checked);
   formData.append("use_hhl", document.getElementById("useHHL").checked);
   formData.append("use_lstm", document.getElementById("useLSTM").checked);
   formData.append("use_ae", document.getElementById("useAE").checked);
