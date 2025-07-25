@@ -41,7 +41,7 @@ document.getElementById('decompressForm').addEventListener('submit', async (e) =
     resultText.textContent = JSON.stringify(output, null, 2);
     resultBox.classList.remove("hidden");
   } catch (err) {
-    resultText.textContent = "❌ Error: " + err.message;
+    resultText.textContent = "Error: " + err.message;
     resultBox.classList.remove("hidden");
   }
 });
