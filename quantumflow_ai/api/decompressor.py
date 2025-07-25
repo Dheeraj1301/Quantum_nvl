@@ -87,8 +87,9 @@ async def decompress(
     # Optional: Autoencoder post-refinement
     refined = None
     if use_ae:
-        ae = AERefiner(dim=len(decoded))
-        refined = ae.refine(decoded)
+        decoded_flat = decoded.reshape(-1)
+        ae = AERefiner(dim=decoded_flat.shape[0])
+        refined = ae.refine(decoded_flat)
 
     # Amplitude estimation (from QFT)
     amplitudes = None
