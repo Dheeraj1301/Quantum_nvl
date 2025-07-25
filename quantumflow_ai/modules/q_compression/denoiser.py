@@ -45,6 +45,15 @@ class LatentDenoiser(nn.Module if TORCH_AVAILABLE else object):  # pragma: no co
         else:
             data = vectors.float()
 
+        # Ensure the tensor has the expected latent dimension
+        if data.dim() == 1:
+            data = data.unsqueeze(1)
+        expected = self.model[0].in_features
+        if data.numel() == 0 or data.shape[-1] != expected:
+            raise ValueError(
+                f"LatentDenoiser expected vectors of size {expected}, got {tuple(data.shape)}"
+            )
+
         opt = torch.optim.Adam(self.parameters(), lr=lr)
         criterion = nn.MSELoss()
 
