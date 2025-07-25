@@ -3,11 +3,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   const lastPage = sessionStorage.getItem("lastModule");
 
-  // Optional auto-redirect on fresh load of index.html
+  // Optional auto-redirect to last used module (if needed)
   if (lastPage && location.pathname.endsWith("index.html")) {
     console.log(`Last used module: ${lastPage}`);
-    // Optional: redirect to last module
-    // window.location.href = `/${lastPage}.html`;
+    // window.location.href = `/${lastPage}.html`; // enable if desired
   }
 
   // Save module navigation state when buttons are clicked
@@ -15,9 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", () => {
       let module = "home";
 
-      if (button.textContent.toLowerCase().includes("routing")) module = "router";
-      else if (button.textContent.toLowerCase().includes("energy")) module = "energy";
-      else if (button.textContent.toLowerCase().includes("compression")) module = "compression";
+      const text = button.textContent.toLowerCase();
+      if (text.includes("routing")) module = "router";
+      else if (text.includes("energy")) module = "energy";
+      else if (text.includes("compression")) module = "compression";
+      else if (text.includes("decompression")) module = "decompressor";  // ✅ NEW
 
       sessionStorage.setItem("lastModule", module);
     });

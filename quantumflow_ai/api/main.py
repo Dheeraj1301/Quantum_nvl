@@ -1,10 +1,11 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 
 from quantumflow_ai.api.q_router import router as q_router
 from quantumflow_ai.api.energy import router as energy_router
+from quantumflow_ai.api.decompressor import router as decompressor_router
 from quantumflow_ai.api.compressor import (
     read_csv_as_array,
     run_compression,
@@ -21,9 +22,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Include routers
+# ✅ Include all module routers
 app.include_router(q_router)
 app.include_router(energy_router)
+app.include_router(decompressor_router)  # ⬅️ NEW: Q-Decompression endpoint
 
 # ✅ Compression API Endpoint
 @app.post("/q-compression/upload")
@@ -64,5 +66,5 @@ async def compress_upload(
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
 
-# ✅ Serve frontend (after API routes)
+# ✅ Serve frontend (after all API routes)
 app.mount("/", StaticFiles(directory="quantumflow_ai/frontend/public", html=True), name="static")
