@@ -6,10 +6,10 @@ import logging
 from fastapi import APIRouter, File, UploadFile, Form
 from pydantic import BaseModel
 
-from modules.q_decompression.qft_decoder import QFTDecoder
-from modules.q_decompression.hhl_solver import HHLSolver
-from modules.q_decompression.ae_refiner import AERefiner
-from modules.q_decompression.lstm_enhancer import LSTMEnhancer
+from quantumflow_ai.modules.q_decompression.qft_decoder import QFTDecoder
+from quantumflow_ai.modules.q_decompression.hhl_solver import HHLSolver
+from quantumflow_ai.modules.q_decompression.ae_refiner import AERefiner
+from quantumflow_ai.modules.q_decompression.lstm_enhancer import LSTMEnhancer
 
 router = APIRouter()
 logger = logging.getLogger("QDecompressionAPI")
