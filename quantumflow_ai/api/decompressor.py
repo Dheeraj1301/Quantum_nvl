@@ -52,11 +52,19 @@ async def decompress(
         arr = enhancer.enhance(arr)
 
     # QFT Decode
+    # The QFTDecoder expects an input vector with a length of ``2**num_qubits``.
+    # The decompression input ``arr`` already represents this vector, so the
+    # number of qubits should be ``log2(len(arr))`` rather than ``len(arr)``.
+    num_qubits = int(np.log2(len(arr)))
+    if 2 ** num_qubits != len(arr):
+        raise ValueError(
+            "Length of input array must be a power of 2 for amplitude embedding"
+        )
     qft = QFTDecoder(
-        num_qubits=len(arr),
+        num_qubits=num_qubits,
         use_quantum=use_qft,
         learnable=learnable_qft,
-        amplitude_estimate=amplitude_estimate
+        amplitude_estimate=amplitude_estimate,
     )
     decoded = qft.decode(arr)
 
