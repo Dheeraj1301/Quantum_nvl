@@ -8,6 +8,7 @@ from pydantic import BaseModel
 
 from quantumflow_ai.modules.q_decompression.qft_decoder import QFTDecoder
 from quantumflow_ai.modules.q_decompression.hhl_solver import HHLSolver
+from quantumflow_ai.modules.q_decompression.qsvt_solver import QSVTSolver
 from quantumflow_ai.modules.q_decompression.ae_refiner import AERefiner
 from quantumflow_ai.modules.q_decompression.lstm_enhancer import LSTMEnhancer
 
@@ -26,6 +27,7 @@ async def decompress(
     use_qft: bool = Form(True),
     learnable_qft: bool = Form(False),
     amplitude_estimate: bool = Form(False),
+    use_qsvt: bool = Form(False),
     use_hhl: bool = Form(True),
     alpha: float = Form(0.5),
     use_lstm: bool = Form(False),
@@ -68,10 +70,19 @@ async def decompress(
     )
     decoded = qft.decode(arr)
 
-    # Solve inverse problem with HHL
-    hhl = HHLSolver(use_quantum=use_hhl, alpha=alpha)
+    # Solve inverse problem
     A = np.identity(len(decoded))
-    features = hhl.solve(A, decoded)
+    if use_qsvt:
+        qsvt = QSVTSolver(use_quantum=use_hhl)
+        try:
+            features = qsvt.solve(A, decoded)
+        except Exception:
+            logger.exception("QSVT solver failed; falling back to HHL")
+            hhl = HHLSolver(use_quantum=use_hhl, alpha=alpha)
+            features = hhl.solve(A, decoded)
+    else:
+        hhl = HHLSolver(use_quantum=use_hhl, alpha=alpha)
+        features = hhl.solve(A, decoded)
 
     # Optional: Autoencoder post-refinement
     refined = None
