@@ -22,12 +22,27 @@ class MetaScheduler:
         except NotFittedError:
             return False
 
+    def _prepare_features(self, features: list[list[float]] | list[float]) -> list[list[float]] | list[float]:
+        """Pad or truncate features to match the trained model's expected dimension."""
+        if isinstance(features[0], list):
+            # Training data: list of samples
+            expected = max(len(f) for f in features)
+            return [f + [0.0] * (expected - len(f)) for f in features]
+        else:
+            # Single feature vector for prediction
+            expected = getattr(self.model, "n_features_in_", len(features))
+            if len(features) < expected:
+                return features + [0.0] * (expected - len(features))
+            return features[:expected]
+
     def train(self, X: list[list[float]], y: list[str]):
-        self.model.fit(X, y)
+        X_prep = self._prepare_features(X)
+        self.model.fit(X_prep, y)
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         joblib.dump(self.model, self.model_path)
 
     def recommend(self, feature: list[float]) -> str:
         if not self._is_model_fitted():
             return "classical"
-        return self.model.predict([feature])[0]
+        prepared = self._prepare_features(feature)
+        return self.model.predict([prepared])[0]
