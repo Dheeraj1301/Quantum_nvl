@@ -4,7 +4,9 @@ This project contains a lightweight demonstration of quantum-inspired modules fo
 
 Some modules, such as the Q-NVLinkOpt optimizer, rely on optional quantum
 machine learning libraries. These can be installed using the additional
-`qml-requirements.txt` file:
+`qml-requirements.txt` file. Installing these dependencies ensures a
+compatible Qiskit version (>=0.45,<1.0) is available so the API can
+successfully import the `Sampler` primitive used by the quantum kernel:
 
 ```bash
 pip install -r quantumflow_ai/qml-requirements.txt

@@ -1,6 +1,10 @@
 # qml-requirements.txt
 pennylane-lightning[gpu]==0.37.0
-qiskit==1.0.2
+# Q-NVLinkOpt currently relies on Qiskit primitives that were introduced
+# in the 0.45.x series while still depending on the legacy BasicAer
+# backend.  The 1.x releases remove this component, so we pin Qiskit to
+# a compatible range.
+qiskit>=0.45,<1.0
 # Provides QuantumKernel used by QuantumGraphEmbedder
 qiskit-machine-learning==0.7.1
 # braket-sdk==1.64.0
