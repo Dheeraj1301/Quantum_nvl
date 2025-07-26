@@ -34,11 +34,22 @@ def load_or_train_model(X, y=None):
                 return [[0.0]]
         return Dummy()
 
-    if os.path.exists(MODEL_PATH):
-        return load_model(MODEL_PATH)
+    model = None
 
-    model = build_lstm_model(X.shape[2])
+    if os.path.exists(MODEL_PATH):
+        try:
+            model = load_model(MODEL_PATH)
+        except Exception:
+            model = None
+
+    if model is None:
+        model = build_lstm_model(X.shape[2])
+
+    # Always update the model if training data is provided. This keeps the
+    # predictions responsive to the latest routing logs instead of relying on
+    # a potentially stale saved model.
     if y is not None:
         model.fit(X, y, epochs=50, verbose=0)
         model.save(MODEL_PATH)
+
     return model
