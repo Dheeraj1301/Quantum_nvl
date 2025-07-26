@@ -6,6 +6,8 @@ from fastapi.responses import JSONResponse
 from quantumflow_ai.api.q_router import router as q_router
 from quantumflow_ai.api.energy import router as energy_router
 from quantumflow_ai.api.decompressor import router as decompressor_router
+from quantumflow_ai.api.hpo import router as hpo_router  # ✅ NEW: Q-HPO backend
+
 from quantumflow_ai.api.compressor import (
     read_csv_as_array,
     run_compression,
@@ -25,7 +27,8 @@ app.add_middleware(
 # ✅ Include all module routers
 app.include_router(q_router)
 app.include_router(energy_router)
-app.include_router(decompressor_router)  # ⬅️ NEW: Q-Decompression endpoint
+app.include_router(decompressor_router)
+app.include_router(hpo_router)  # ✅ Q-HPO optimizer endpoint
 
 # ✅ Compression API Endpoint
 @app.post("/q-compression/upload")
@@ -60,7 +63,6 @@ async def compress_upload(
                 "predict_compressibility": predict_compressibility,
             }
         )
-
         result = run_compression(data, config=config)
         return JSONResponse(content=result)
     except Exception as e:
