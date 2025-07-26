@@ -34,7 +34,16 @@ class VQCOptimizer:
 
     def optimize(self) -> Dict:
         if qml is None:
-            return {"lr": 1e-3, "batch_size": 64}
+            # When PennyLane is unavailable we fall back to a dummy configuration
+            # for testing. Ensure the stub returns a fully populated config so
+            # downstream components like the surrogate encoder don't fail due to
+            # missing keys.
+            return {
+                "lr": 1e-3,
+                "batch_size": 64,
+                "dropout": 0.2,
+                "weight_decay": 0.01,
+            }
 
         @qml.qnode(DEVICE)
         def qnode(params): return self.circuit(params)

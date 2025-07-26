@@ -18,4 +18,11 @@ class MetaLSTMPredictor(nn.Module):
     def predict_next(self, sequence):
         self.eval()
         with torch.no_grad():
-            return self.forward(torch.tensor(sequence).float().unsqueeze(0)).item()
+            seq = torch.tensor(sequence).float()
+            # `sequence` may already include a length-1 dimension for the
+            # features. The model expects input of shape (batch, seq_len, feat).
+            if seq.dim() == 3 and seq.size(1) == 1:
+                seq = seq.squeeze(1)
+            if seq.dim() == 2:
+                seq = seq.unsqueeze(0)
+            return self.forward(seq).item()
