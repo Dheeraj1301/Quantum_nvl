@@ -38,3 +38,13 @@ def test_meta_scheduler_untrained():
     meta.model = RandomForestClassifier()
     strategy = meta.recommend([1.0, 2.0, 3.0])
     assert isinstance(strategy, str)
+
+
+def test_meta_scheduler_feature_padding(tmp_path):
+    meta = MetaScheduler()
+    meta.model_path = tmp_path / "model.pkl"
+    X = [[float(i) for i in range(8)] for _ in range(4)]
+    y = ["qbm", "classical", "qaoa", "qbm"]
+    meta.train(X, y)
+    strategy = meta.recommend([1.0, 2.0, 3.0])
+    assert isinstance(strategy, str)
