@@ -1,5 +1,7 @@
 # qml-requirements.txt
 pennylane-lightning[gpu]==0.37.0
 qiskit==1.0.2
+# Provides QuantumKernel used by QuantumGraphEmbedder
+qiskit-machine-learning==0.7.1
 # braket-sdk==1.64.0
 # braket-pennylane-plugin==1.15.0
