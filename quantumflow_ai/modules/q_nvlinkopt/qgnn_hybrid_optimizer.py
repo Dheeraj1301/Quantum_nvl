@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch_geometric.nn import GCNConv
 import networkx as nx
 import numpy as np
-from modules.q_nvlinkopt.nvlink_graph_optimizer import QAOANVLinkOptimizer
+from quantumflow_ai.modules.q_nvlinkopt.nvlink_graph_optimizer import QAOANVLinkOptimizer
 
 class QAOA_GNN_Router(nn.Module):
     def __init__(self, input_dim=3, hidden_dim=8, output_dim=2):
