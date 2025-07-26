@@ -1,11 +1,11 @@
 from fastapi import APIRouter, UploadFile, File
 import pandas as pd
 import networkx as nx
-from modules.q_nvlinkopt.qgnn_hybrid_optimizer import QAOA_GNN_Router
-from modules.q_nvlinkopt.quantum_graph_kernel import QuantumGraphEmbedder
-from modules.q_nvlinkopt.vqaoa_balancer import VQAOABalancer
-from modules.q_nvlinkopt.quantum_routing_rl import QuantumRoutingAgent
-from modules.q_nvlinkopt.topology_qclassifier import QuantumTopoClassifier
+from quantumflow_ai.modules.q_nvlinkopt.qgnn_hybrid_optimizer import QAOA_GNN_Router
+from quantumflow_ai.modules.q_nvlinkopt.quantum_graph_kernel import QuantumGraphEmbedder
+from quantumflow_ai.modules.q_nvlinkopt.vqaoa_balancer import VQAOABalancer
+from quantumflow_ai.modules.q_nvlinkopt.quantum_routing_rl import QuantumRoutingAgent
+from quantumflow_ai.modules.q_nvlinkopt.topology_qclassifier import QuantumTopoClassifier
 
 router = APIRouter()
 
