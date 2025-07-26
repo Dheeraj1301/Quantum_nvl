@@ -2,6 +2,14 @@
 
 This project contains a lightweight demonstration of quantum-inspired modules for token routing and energy scheduling. It includes simple training utilities and a small FastAPI application.
 
+Some modules, such as the Q-NVLinkOpt optimizer, rely on optional quantum
+machine learning libraries. These can be installed using the additional
+`qml-requirements.txt` file:
+
+```bash
+pip install -r quantumflow_ai/qml-requirements.txt
+```
+
 ## Running tests
 
 ```bash
