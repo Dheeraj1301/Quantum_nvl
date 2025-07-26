@@ -7,6 +7,59 @@
   <title>QuantumFlow - Module Select</title>
   <link rel="stylesheet" href="styles.css" />
   <script defer src="/app.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #111;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,255,0,0.2);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #66ff99;
+    }
+
+    .subtitle {
+      margin-bottom: 1.5rem;
+      color: #99ffcc;
+    }
+
+    .button-row {
+      display: flex;
+      flex-direction: column; /* ✅ vertical */
+      gap: 0.75rem;
+    }
+
+    button {
+      background-color: #00ff88;
+      color: #000;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #33ffaa;
+    }
+  </style>
 </head>
 <body>
   <div class="container center">
@@ -17,7 +70,8 @@
       <button onclick="location.href='energy.html'">Q-Energy</button>
       <button onclick="location.href='compressor.html'">Q-Compression</button>
       <button onclick="location.href='decompressor.html'">Q-Decompression</button>
-      <button onclick="location.href='hpo.html'">Q-HPO</button> <!-- ✅ NEW -->
+      <button onclick="location.href='hpo.html'">Q-HPO</button>
+      <button onclick="location.href='nvlinkopt.html'">Q-NVLinkOpt</button> <!-- ✅ NEW -->
     </div>
   </div>
 </body>

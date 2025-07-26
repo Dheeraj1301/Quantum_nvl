@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QuantumFlow — NVLink Optimizer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>NVLink Communication Optimizer</h1>
+
+    <form id="nvlinkForm">
+      <!-- File upload -->
+      <label for="fileInput">Upload NVLink Graph CSV:</label>
+      <input type="file" id="fileInput" accept=".csv" required />
+
+      <!-- Strategy Checkboxes -->
+      <fieldset class="checkbox-group">
+        <legend>Select Optimization Strategies:</legend>
+
+        <label><input type="checkbox" id="useQGNN" /> Use QAOA-GNN Hybrid</label>
+        <label><input type="checkbox" id="useKernel" /> Use Quantum Graph Kernel</label>
+        <label><input type="checkbox" id="useVQAOA" /> Use Variational QAOA</label>
+        <label><input type="checkbox" id="useRL" /> Use Quantum Reinforcement Learner</label>
+        <label><input type="checkbox" id="useClassifier" /> Use Quantum Topology Classifier</label>
+      </fieldset>
+
+      <!-- Submit -->
+      <button type="submit">Run Optimization</button>
+    </form>
+
+    <!-- Output -->
+    <div id="output" class="output-box"></div>
+
+    <!-- Back -->
+    <div class="center">
+      <a href="index.html" class="back-link">← Back to module selection</a>
+    </div>
+  </div>
+
+  <script src="nvlinkopt.js"></script>
+</body>
+</html>

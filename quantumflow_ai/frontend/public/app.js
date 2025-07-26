@@ -17,9 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (text.includes("routing")) module = "router";
       else if (text.includes("energy")) module = "energy";
-      else if (text.includes("compression")) module = "compression";
+      else if (text.includes("compression")) module = "compressor";
       else if (text.includes("decompression")) module = "decompressor";
-      else if (text.includes("hpo")) module = "hpo"; // ✅ HPO added
+      else if (text.includes("hpo")) module = "hpo";
+      else if (text.includes("nvlink")) module = "nvlinkopt"; // ✅ NEW
 
       sessionStorage.setItem("lastModule", module);
     });
