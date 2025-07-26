@@ -17,7 +17,7 @@ from quantumflow_ai.modules.q_energy.gnn_predictor import GNNPredictor, prepare_
 def train_gnn(
     profiles=["a100", "h100", "gb200"],
     data_dir=None,
-    model_out="modules/q_energy/model/gnn.pt",
+    model_out=str(Path(__file__).resolve().parents[1] / "modules" / "q_energy" / "model" / "gnn.pt"),
 ):
     """Train the GNN cost model from hardware profiles."""
 
