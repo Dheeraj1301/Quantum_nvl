@@ -36,7 +36,11 @@ def main() -> None:
         default="quantumflow_ai/notebooks/profiles",
         help="Directory containing profile JSON files",
     )
-    gnn.add_argument("--model-out", default="modules/q_energy/model/gnn.pt", help="Path to save the trained model")
+    gnn.add_argument(
+        "--model-out",
+        default="quantumflow_ai/modules/q_energy/model/gnn.pt",
+        help="Path to save the trained model",
+    )
 
     # Meta Model Trainer
     meta = subparsers.add_parser("train-meta", help="Train the meta scheduler")

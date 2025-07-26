@@ -4,6 +4,7 @@
 from quantumflow_ai.modules.q_energy.qbm_scheduler import qbm_schedule
 from quantumflow_ai.modules.q_energy.classical_scheduler import classical_schedule
 from quantumflow_ai.modules.q_energy.scheduler_utils import normalize_energy_profile
+from quantumflow_ai.modules.q_energy.meta_scheduler import MetaScheduler
 
 def mock_job_graph():
     return {
@@ -28,3 +29,12 @@ def test_classical_scheduler():
     profile = normalize_energy_profile(mock_energy_profile())
     result = classical_schedule(graph, profile)
     assert all(job in result for job in graph["jobs"])
+
+
+def test_meta_scheduler_untrained():
+    meta = MetaScheduler()
+    # Ensure model is in an untrained state
+    from sklearn.ensemble import RandomForestClassifier
+    meta.model = RandomForestClassifier()
+    strategy = meta.recommend([1.0, 2.0, 3.0])
+    assert isinstance(strategy, str)

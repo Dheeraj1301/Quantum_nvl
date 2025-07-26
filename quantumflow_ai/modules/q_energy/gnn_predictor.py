@@ -2,6 +2,7 @@ import torch
 from torch_geometric.data import Data
 from torch_geometric.nn import GCNConv
 from torch.nn import Linear, ReLU, Sequential
+from pathlib import Path
 
 class GNNPredictor(torch.nn.Module):
     def __init__(self, in_channels):
@@ -28,7 +29,9 @@ def prepare_graph_data(job_graph: dict, energy_profile: dict) -> Data:
     x = torch.tensor([[energy_profile[j]] for j in job_ids], dtype=torch.float)
     return Data(x=x, edge_index=edge_index)
 
-def predict_energy_with_gnn(job_graph, energy_profile, model_path="modules/q_energy/model/gnn.pt"):
+def predict_energy_with_gnn(job_graph, energy_profile, model_path=None):
+    if model_path is None:
+        model_path = Path(__file__).resolve().parent / "model" / "gnn.pt"
     model = GNNPredictor(in_channels=1)
     model.load_state_dict(torch.load(model_path))
     model.eval()

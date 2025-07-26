@@ -5,8 +5,9 @@ from sklearn.utils.validation import check_is_fitted
 import joblib
 import os
 import json
+from pathlib import Path
 
-MODEL_PATH = "modules/q_energy/model/ml_energy_predictor.pkl"
+MODEL_PATH = Path(__file__).resolve().parent / "model" / "ml_energy_predictor.pkl"
 
 class MLEnergyPredictor:
     def __init__(self):
