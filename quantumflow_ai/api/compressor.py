@@ -1,4 +1,5 @@
-from fastapi import UploadFile
+from fastapi import UploadFile, APIRouter, File, Form
+from fastapi.responses import JSONResponse
 import pandas as pd
 import numpy as np
 from quantumflow_ai.modules.q_compression.q_autoencoder import QuantumAutoencoder
@@ -14,6 +15,8 @@ except Exception:
 from quantumflow_ai.core.logger import get_logger
 
 logger = get_logger("CompressorAPI")
+
+router = APIRouter()
 
 
 def validate_compression_config(config: dict) -> dict:
@@ -190,3 +193,41 @@ def run_compression(
         "compressed_vectors": compressed.tolist(),
         "predictions": predictions,
     }
+
+
+@router.post("/q-compression/upload")
+async def compress_upload(
+    file: UploadFile = File(...),
+    use_quantum: bool = True,
+    use_denoiser: bool = False,
+    noise: bool = False,
+    noise_level: float = 0.0,
+    use_dropout: bool = False,
+    dropout_prob: float = 0.0,
+    enable_pruning: bool = False,
+    pruning_threshold: float = 0.01,
+    predict_first: bool = False,
+    compression_mode: str = "qml",
+    predict_compressibility: bool = False,
+):
+    try:
+        data = read_csv_as_array(file)
+        config = validate_compression_config(
+            {
+                "use_quantum": use_quantum,
+                "use_denoiser": use_denoiser,
+                "noise": noise,
+                "noise_level": noise_level,
+                "use_dropout": use_dropout,
+                "dropout_prob": dropout_prob,
+                "enable_pruning": enable_pruning,
+                "pruning_threshold": pruning_threshold,
+                "predict_first": predict_first,
+                "compression_mode": compression_mode,
+                "predict_compressibility": predict_compressibility,
+            }
+        )
+        result = run_compression(data, config=config)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": str(e)})
