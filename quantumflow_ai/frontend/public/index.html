@@ -1,78 +1,89 @@
-<!-- quantumflow_ai/frontend/public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QuantumFlow - Module Select</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="/app.js"></script>
-  <style>
-    body {
-      background-color: #000;
-      color: #0f0;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background-color: #111;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 20px rgba(0,255,0,0.2);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      color: #66ff99;
-    }
-
-    .subtitle {
-      margin-bottom: 1.5rem;
-      color: #99ffcc;
-    }
-
-    .button-row {
-      display: flex;
-      flex-direction: column; /* ✅ vertical */
-      gap: 0.75rem;
-    }
-
-    button {
-      background-color: #00ff88;
-      color: #000;
-      font-weight: bold;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #33ffaa;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuantumFlow_AI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+  <script defer src="router.js"></script>
+  <script defer src="energy.js"></script>
 </head>
 <body>
-  <div class="container center">
-    <h1>QuantumFlow AI Dashboard</h1>
-    <p class="subtitle">Select a module to begin:</p>
-    <div class="button-row">
-      <button onclick="location.href='router.html'">Q-Routing</button>
-      <button onclick="location.href='energy.html'">Q-Energy</button>
-      <button onclick="location.href='compressor.html'">Q-Compression</button>
-      <button onclick="location.href='decompressor.html'">Q-Decompression</button>
-      <button onclick="location.href='hpo.html'">Q-HPO</button>
-      <button onclick="location.href='nvlinkopt.html'">Q-NVLinkOpt</button> <!-- ✅ NEW -->
-    </div>
-  </div>
+  <aside id="sidebar">
+    <h1>QuantumFlow_AI</h1>
+    <ul id="nav">
+      <li data-module="router" class="active">Routing</li>
+      <li data-module="energy">Energy</li>
+      <li data-module="compressor">Compression</li>
+      <li data-module="decompressor">Decompression</li>
+      <li data-module="hpo">HPO</li>
+      <li data-module="nvlink">NVLink</li>
+      <li data-module="qattention">Q-Attention</li>
+    </ul>
+  </aside>
+  <main id="main">
+    <header>
+      <span id="status">Ready</span>
+      <span id="clock"></span>
+    </header>
+    <div id="workspace"></div>
+  </main>
+
+  <!-- Router Module Template -->
+  <template id="router-template">
+    <section class="module">
+      <h2>Routing Optimizer</h2>
+      <form id="routing-form">
+        <div class="grid two">
+          <div>
+            <label>Upload CSV<input type="file" id="route-file"></label>
+          </div>
+          <div>
+            <label>Tokens<textarea id="route-tokens" rows="4">[[0.8,0.3],[0.4,0.6]]</textarea></label>
+          </div>
+        </div>
+        <div class="switches">
+          <label class="switch"><input type="checkbox" id="route-quantum"><span>Quantum</span></label>
+        </div>
+        <div class="buttons">
+          <button type="submit" class="primary">Run</button>
+          <button type="button" id="route-heatmap" class="secondary">Heatmap</button>
+        </div>
+      </form>
+      <canvas id="route-canvas" width="600" height="200"></canvas>
+      <div id="route-heat" class="heatmap"></div>
+      <pre id="route-result" class="result"></pre>
+    </section>
+  </template>
+
+  <!-- Energy Module Template -->
+  <template id="energy-template">
+    <section class="module">
+      <h2>Energy Scheduler</h2>
+      <form id="energy-form">
+        <textarea id="energy-matrix" rows="4">[[0.2,0.9],[0.1,0.5]]</textarea>
+        <div class="switches">
+          <label class="switch"><input type="checkbox" id="energy-quantum" checked><span>Quantum</span></label>
+          <label class="switch"><input type="checkbox" id="energy-ml"><span>ML</span></label>
+        </div>
+        <div class="buttons">
+          <button type="submit" class="primary">Schedule</button>
+          <button type="button" id="energy-wave" class="secondary">Wave</button>
+        </div>
+      </form>
+      <canvas id="energy-canvas" width="600" height="200"></canvas>
+      <pre id="energy-result" class="result"></pre>
+    </section>
+  </template>
+
+  <!-- Placeholder templates for other modules -->
+  <template id="compressor-template"><section class="module"><h2>Compression Module</h2></section></template>
+  <template id="decompressor-template"><section class="module"><h2>Decompression Module</h2></section></template>
+  <template id="hpo-template"><section class="module"><h2>HPO Module</h2></section></template>
+  <template id="nvlink-template"><section class="module"><h2>NVLink Module</h2></section></template>
+  <template id="qattention-template"><section class="module"><h2>Q-Attention Module</h2></section></template>
 </body>
 </html>
