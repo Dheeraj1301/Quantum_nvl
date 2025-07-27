@@ -27,7 +27,7 @@ class QuantumGraphEmbedder:
         self.pca = PCA(n_components=pca_components)
 
     def _kernel_matrix(self, vectors: np.ndarray) -> np.ndarray:
-        if _HAS_PENNYLANE:
+        if _HAS_PENNYLANE and hasattr(qml.kernels, "projected_distance"):
             return qml.kernels.projected_distance(vectors, scale=0.5)
         sq_dists = np.sum((vectors[:, None, :] - vectors[None, :, :]) ** 2, axis=-1)
         return np.exp(-0.5 * sq_dists)

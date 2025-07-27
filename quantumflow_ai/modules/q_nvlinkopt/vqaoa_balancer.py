@@ -26,4 +26,6 @@ class VQAOABalancer:
         params = self.params
         for _ in range(30):
             params = opt.step(lambda v: -sum(qnode(v)), params)
-        return qnode(params)
+        results = qnode(params)
+        # Convert to a plain list of floats for easy JSON serialization
+        return [float(r) for r in results]

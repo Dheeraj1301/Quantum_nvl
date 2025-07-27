@@ -14,11 +14,19 @@ class QAOANVLinkOptimizer:
         self.graph = nvlink_graph
         self.depth = depth
         self.num_nodes = self.graph.number_of_nodes()
+
+        # Map arbitrary node labels to a contiguous wire range starting at 0.
+        # PennyLane devices expect wire labels to exist on the device, so we
+        # create a mapping that translates graph node identifiers to
+        # sequential indices used as wire labels in the circuit.
+        self.nodes = list(self.graph.nodes())
+        self.wire_map = {node: idx for idx, node in enumerate(self.nodes)}
+
         self.dev = get_quantum_device(wires=self.num_nodes)
 
     def _cost_hamiltonian(self):
         """Cost function: minimize total edge conflicts (congestion)"""
-        edges = list(self.graph.edges())
+        edges = [(self.wire_map[i], self.wire_map[j]) for i, j in self.graph.edges()]
         def cost_fn(z):
             return sum((1 - z[i]*z[j])/2 for i, j in edges)
         return cost_fn
@@ -29,9 +37,10 @@ class QAOANVLinkOptimizer:
 
         def qaoa_layer(gamma, beta):
             for i, j in self.graph.edges():
-                qml.CNOT(wires=[i, j])
-                qml.RZ(-gamma, wires=j)
-                qml.CNOT(wires=[i, j])
+                iw, jw = self.wire_map[i], self.wire_map[j]
+                qml.CNOT(wires=[iw, jw])
+                qml.RZ(-gamma, wires=jw)
+                qml.CNOT(wires=[iw, jw])
             for i in range(self.num_nodes):
                 qml.RX(2 * beta, wires=i)
 
@@ -56,7 +65,10 @@ class QAOANVLinkOptimizer:
     def _extract_plan(self, params):
         """Convert optimized angles into coloring/partitioning"""
         gamma, beta = params
-        colors = {i: int(np.round(np.sin(gamma + i * beta))) % 3 for i in range(self.num_nodes)}
+        colors = {
+            node: int(np.round(np.sin(gamma + idx * beta))) % 3
+            for node, idx in self.wire_map.items()
+        }
         return colors
 
     def score_subgraph(self, subgraph: nx.Graph) -> float:

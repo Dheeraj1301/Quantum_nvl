@@ -33,5 +33,9 @@ class QAOA_GNN_Router(nn.Module):
             features.append([load, degree, qscore])
 
         x = torch.tensor(features, dtype=torch.float)
-        edge_index = torch.tensor(list(graph.edges), dtype=torch.long).t().contiguous()
+
+        node_map = {node: idx for idx, node in enumerate(graph.nodes())}
+        mapped_edges = [(node_map[u], node_map[v]) for u, v in graph.edges()]
+        edge_index = torch.tensor(mapped_edges, dtype=torch.long).t().contiguous()
+
         return x, edge_index
