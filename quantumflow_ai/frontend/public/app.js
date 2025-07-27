@@ -9,7 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // window.location.href = `/${lastPage}.html`; // enable if desired
   }
 
-  // Save module navigation state
+  // Save module navigation state from buttons or sidebar links
+  function storeModule(mod) {
+    sessionStorage.setItem("lastModule", mod);
+  }
+
   document.querySelectorAll("button").forEach(button => {
     button.addEventListener("click", () => {
       let module = "home";
@@ -21,9 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (text.includes("decompression")) module = "decompressor";
       else if (text.includes("hpo")) module = "hpo";
       else if (text.includes("nvlink")) module = "nvlinkopt";
-      else if (text.includes("attention")) module = "attention"; // ✅ NEW
+      else if (text.includes("attention")) module = "attention";
 
-      sessionStorage.setItem("lastModule", module);
+      storeModule(module);
+    });
+  });
+
+  document.querySelectorAll(".nav-link").forEach(link => {
+    link.addEventListener("click", () => {
+      const href = link.getAttribute("href");
+      if (href) storeModule(href.replace(".html", ""));
     });
   });
 

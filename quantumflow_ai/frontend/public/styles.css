@@ -9,9 +9,9 @@ html, body {
 }
 
 body {
-  display: grid;
-  grid-template-columns: 220px 1fr;
+  display: flex;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .container {
@@ -26,8 +26,15 @@ body {
 
 h1, h2, h3, h4 {
   color: #00ff66;
+  font-weight: 600;
+  line-height: 1.2;
   margin-top: 0;
 }
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.2rem; }
 
 label {
   font-weight: 600;
@@ -102,6 +109,11 @@ button:hover {
   text-align: center;
 }
 
+.subtitle {
+  color: #99ffcc;
+  margin-bottom: 1.5rem;
+}
+
 .button-row {
   display: flex;
   gap: 1.5rem;
@@ -115,6 +127,12 @@ button:hover {
   box-shadow: 0 0 20px rgba(0, 255, 100, 0.15);
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -135,6 +153,10 @@ button:hover {
   background-color: rgba(0, 255, 100, 0.2);
   color: #00ff66;
 }
+.nav-link.active {
+  border-left: 4px solid #00ff66;
+  padding-left: calc(0.75rem - 4px);
+}
 
 .topbar {
   grid-column: 1 / -1;
@@ -147,7 +169,10 @@ button:hover {
 }
 
 .main {
+  margin-left: 220px;
   padding: 1rem 2rem;
+  flex: 1;
+  overflow-x: auto;
 }
 
 @media (max-width: 640px) {
@@ -156,11 +181,17 @@ button:hover {
     gap: 1rem;
   }
   body {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
   .sidebar {
+    position: static;
     flex-direction: row;
+    width: 100%;
+    height: auto;
     overflow-x: auto;
+  }
+  .main {
+    margin-left: 0;
   }
   .sidebar h2 {
     display: none;
