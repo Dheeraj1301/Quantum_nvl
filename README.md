@@ -55,6 +55,8 @@ You can also execute the CLI script directly from the repository:
 ```bash
 python quantumflow_ai/__main__.py --help
 ```
+<img width="1920" height="1080" alt="Screenshot (115)" src="https://github.com/user-attachments/assets/4c7fe8d1-d9d0-445f-bdb9-af5f93ae4ec3" />
+
 ## q_routing
 ### MODULE: q_routing
 
@@ -136,6 +138,11 @@ Anomaly-aware LSTM pre-filter for routing
 Quantum-routing penalty for untrusted paths
 
 Why: Enables adaptive routing under active threats
+<img width="1920" height="1080" alt="Screenshot (116)" src="https://github.com/user-attachments/assets/1247d23e-8228-4494-9ca2-c4d660ebc166" />
+<img width="1920" height="1080" alt="Screenshot (117)" src="https://github.com/user-attachments/assets/f98ab307-ac6e-485c-b41b-f531e13575e6" />
+<img width="1920" height="1080" alt="Screenshot (118)" src="https://github.com/user-attachments/assets/f7d54faa-937c-4af7-a9b6-70ff19fb3df9" />
+<img width="1920" height="1080" alt="Screenshot (119)" src="https://github.com/user-attachments/assets/988248ed-af93-4957-a4e9-5468b53eb7be" />
+
 
 
 ## q_energy
@@ -199,6 +206,9 @@ Renewable-source-aware QAOA scheduler
 GNN energy-graph encoding of jobs
 
 Why: Decarbonizes AI infrastructure, aligns with ESG goals
+<img width="1920" height="1080" alt="Screenshot (121)" src="https://github.com/user-attachments/assets/e7e25dd9-7327-4df9-a245-c0630e47853d" />
+<img width="1920" height="1080" alt="Screenshot (122)" src="https://github.com/user-attachments/assets/90c6b64a-ef94-44af-8d58-0a609baed11e" />
+<img width="1920" height="1080" alt="Screenshot (123)" src="https://github.com/user-attachments/assets/1f0c59a4-7033-4b56-b420-49b1fd08b2aa" />
 
 
 ## q_compressor
@@ -255,6 +265,9 @@ Amplitude-embedded AE for noisy signals
 Spectrogram-enhanced deep quantization
 
 Why: Transmit critical patterns with minimal loss
+<img width="1920" height="1080" alt="Screenshot (124)" src="https://github.com/user-attachments/assets/37a47215-0330-49f7-8261-220ffb01e673" />
+<img width="1920" height="1080" alt="Screenshot (125)" src="https://github.com/user-attachments/assets/30636159-aea6-4938-a734-98ef19933821" />
+<img width="1920" height="1080" alt="Screenshot (126)" src="https://github.com/user-attachments/assets/0466dc31-1965-4e92-a68c-e55e0828b332" />
 
 ## q_decompressor
 ### MODULE: q_decompressor
@@ -375,6 +388,10 @@ QML-optimized search for dropout, feature extractors
 Fine-tuned on adversarial noise profiles
 
 Why: Elevates detection accuracy under uncertainty
+<img width="1920" height="1080" alt="Screenshot (127)" src="https://github.com/user-attachments/assets/901204c9-3b5b-4372-bac3-bd5052b013d3" />
+<img width="1920" height="1080" alt="Screenshot (128)" src="https://github.com/user-attachments/assets/3e427519-f086-4f83-9f42-1822fa6f23f7" />
+<img width="1920" height="1080" alt="Screenshot (129)" src="https://github.com/user-attachments/assets/97d5c85b-657d-48bb-a1b9-0c7661eecf2a" />
+<img width="1920" height="1080" alt="Screenshot (130)" src="https://github.com/user-attachments/assets/884d88e8-59b8-4b03-b882-8979390fd640" />
 
 
 ## q_nvlink
@@ -432,6 +449,10 @@ Real-time QAOA remapping of compute graphs
 Volatility-aware graph refinement
 
 Why: Enables low-latency inference pipelines under strict timing
+<img width="1920" height="1080" alt="Screenshot (131)" src="https://github.com/user-attachments/assets/02d89599-537e-4df1-90a8-da26f86fa621" />
+<img width="1920" height="1080" alt="Screenshot (132)" src="https://github.com/user-attachments/assets/3e6fe073-249a-4bd7-8857-739ef3f75e47" />
+<img width="1920" height="1080" alt="Screenshot (133)" src="https://github.com/user-attachments/assets/b4dd5a7c-54fc-4bf3-9103-87a8ee199ae2" />
+<img width="1920" height="1080" alt="Screenshot (134)" src="https://github.com/user-attachments/assets/d860680d-9bea-4105-b9b6-5db0f94400b4" />
 
 
 ## q_attention
@@ -491,3 +512,7 @@ Lightweight Q-Attention modules
 Quantum-kernelized spatiotemporal embeddings
 
 Why: Brings GenAI-quality attention to low-power devices
+<img width="1920" height="1080" alt="Screenshot (135)" src="https://github.com/user-attachments/assets/d35ee602-70b0-4c12-a190-ff5eca54182c" />
+<img width="1920" height="1080" alt="Screenshot (136)" src="https://github.com/user-attachments/assets/06024f5c-fa33-438a-9d4b-06ce6c7d3362" />
+<img width="1920" height="1080" alt="Screenshot (137)" src="https://github.com/user-attachments/assets/a6591acd-230b-401f-bb73-11e19b3530b0" />
+<img width="1920" height="1080" alt="Screenshot (138)" src="https://github.com/user-attachments/assets/0fed6470-dcb3-40d1-a8d1-6889140ec40f" />
