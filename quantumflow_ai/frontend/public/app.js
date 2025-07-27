@@ -1,28 +1,42 @@
-// quantumflow_ai/frontend/public/app.js
+(function () {
+  const templates = {
+    router: document.getElementById('router-template'),
+    energy: document.getElementById('energy-template'),
+    compressor: document.getElementById('compressor-template'),
+    decompressor: document.getElementById('decompressor-template'),
+    hpo: document.getElementById('hpo-template'),
+    nvlink: document.getElementById('nvlink-template'),
+    qattention: document.getElementById('qattention-template'),
+  };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const lastPage = sessionStorage.getItem("lastModule");
+  const workspace = document.getElementById('workspace');
 
-  // Optional: auto-redirect to last used module
-  if (lastPage && location.pathname.endsWith("index.html")) {
-    console.log(`Last used module: ${lastPage}`);
-    // window.location.href = `/${lastPage}.html`; // enable if desired
+  function loadModule(name) {
+    workspace.textContent = '';
+    const tpl = templates[name];
+    if (!tpl) return;
+    const clone = tpl.content.cloneNode(true);
+    workspace.appendChild(clone);
+    const mod = window.modules && window.modules[name];
+    if (mod && typeof mod.init === 'function') mod.init(workspace);
+    const section = workspace.querySelector('.module');
+    if (section) {
+      requestAnimationFrame(() => section.classList.add('visible'));
+    }
   }
 
-  // Save module navigation state
-  document.querySelectorAll("button").forEach(button => {
-    button.addEventListener("click", () => {
-      let module = "home";
-      const text = button.textContent.toLowerCase();
-
-      if (text.includes("routing")) module = "router";
-      else if (text.includes("energy")) module = "energy";
-      else if (text.includes("compression")) module = "compressor";
-      else if (text.includes("decompression")) module = "decompressor";
-      else if (text.includes("hpo")) module = "hpo";
-      else if (text.includes("nvlink")) module = "nvlinkopt"; // ✅ NEW
-
-      sessionStorage.setItem("lastModule", module);
-    });
+  document.getElementById('nav').addEventListener('click', (e) => {
+    const item = e.target.closest('li[data-module]');
+    if (!item) return;
+    document.querySelectorAll('#nav li').forEach(li => li.classList.remove('active'));
+    item.classList.add('active');
+    loadModule(item.dataset.module);
   });
-});
+
+  setInterval(() => {
+    const clock = document.getElementById('clock');
+    if (clock) clock.textContent = new Date().toLocaleTimeString();
+  }, 1000);
+
+  loadModule('router');
+})();
