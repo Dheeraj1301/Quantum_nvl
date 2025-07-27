@@ -37,13 +37,18 @@ class VQCOptimizer:
             # When PennyLane is unavailable we fall back to a dummy configuration
             # for testing. Ensure the stub returns a fully populated config so
             # downstream components like the surrogate encoder don't fail due to
-            # missing keys.
-            return {
+            # missing keys.  The optimizer should still populate ``best_config``
+            # and ``best_score`` so later stages do not receive ``None`` or
+            # infinite values.
+            self.best_config = {
                 "lr": 1e-3,
                 "batch_size": 64,
                 "dropout": 0.2,
                 "weight_decay": 0.01,
             }
+            # Use a simple finite score derived from a dummy parameter vector
+            self.best_score = self.cost(np.zeros(4))
+            return self.best_config
 
         @qml.qnode(DEVICE)
         def qnode(params): return self.circuit(params)

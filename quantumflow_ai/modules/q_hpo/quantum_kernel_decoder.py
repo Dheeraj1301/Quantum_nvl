@@ -21,9 +21,13 @@ class KernelMLP(nn.Module):
 
 class QuantumKernelDecoder:
     def __init__(self, config_vectors):
-        self.config_vectors = config_vectors
+        # ``config_vectors`` may be provided as a plain Python list when used in
+        # tests or when the decoder operates without PennyLane installed.
+        # Converting to ``np.ndarray`` ensures downstream vectorized operations
+        # behave consistently.
+        self.config_vectors = np.asarray(config_vectors, dtype=float)
         self.kernel_matrix = self.compute_kernel_matrix()
-        self.model = KernelMLP(input_dim=len(config_vectors))
+        self.model = KernelMLP(input_dim=len(self.config_vectors))
 
     def compute_kernel_matrix(self):
         """Compute a kernel matrix for the provided configuration vectors.
