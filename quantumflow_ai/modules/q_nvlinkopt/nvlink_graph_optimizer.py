@@ -58,3 +58,24 @@ class QAOANVLinkOptimizer:
         gamma, beta = params
         colors = {i: int(np.round(np.sin(gamma + i * beta))) % 3 for i in range(self.num_nodes)}
         return colors
+
+    def score_subgraph(self, subgraph: nx.Graph) -> float:
+        """Return a simple congestion score for ``subgraph`` using QAOA.
+
+        The method runs a short QAOA optimization on the provided ``subgraph``
+        and evaluates the resulting colouring by counting edge conflicts.  A
+        higher score indicates fewer conflicts and therefore a better mapping.
+        """
+
+        if subgraph.number_of_nodes() == 0:
+            return 0.0
+
+        # Reuse the optimizer logic on the subgraph
+        sub_opt = QAOANVLinkOptimizer(subgraph, depth=self.depth)
+        plan = sub_opt.optimize()
+
+        conflicts = sum(1 for u, v in subgraph.edges() if plan[u] == plan[v])
+        max_conflicts = subgraph.number_of_edges() or 1
+
+        # Normalized score in [0, 1], where 1.0 means no conflicts
+        return 1.0 - (conflicts / max_conflicts)
