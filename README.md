@@ -70,6 +70,20 @@ Below is a guideline for selecting routing settings. Input size reflects the num
 | 1k-10k tokens | Quantum device overloaded | Throughput | HQC only | Uses classical warm start to speed up |
 | \>10k tokens | Quantum + classical | Robustness | QAOA + HQC + deterministic | Ensures progress, heavy compute load |
 
+#### Future Advancements
+- Quantum Attention-Guided Routing (QAGR) with a classical attention encoder and quantum variational circuit.
+- Variational Quantum Clustering for Expert Assignment.
+- GNN-Based Token Graph Routing with Quantum Layers.
+- Quantum Noise-Aware Routing (QNAR) with hardware noise models.
+- Quantum LSTM for Temporal Expert Prediction.
+- Quantum Entanglement-Aware Expert Sharding.
+- Quantum Capsule Routing Network (QCapsNet-Router).
+- Quantum Kernel Token Embedding for Routing.
+- Quantum Diffusion Routing (QDR) with quantum denoising.
+- Quantum-LSTM-Aided Failure-Aware Routing.
+- Quantum Walk Token Diffusion Over Expert Graph.
+- Contrastive Quantum Metric Routing (CQMR).
+
 
 ## q_energy
 ### MODULE: q_energy
@@ -99,6 +113,14 @@ Managing power draw is critical for large GPU clusters running trillion-paramete
 | Transformer inference | Limited | Classical GNN only | Lower overhead |
 | Mixed batch workloads | Busy quantum hardware | Hybrid meta-learning | Adapts to resource availability |
 | Power constrained | None | Classical fallback | Keeps consumption steady |
+#### Future Advancements
+- Quantum Recurrent Memory Routing (QRMR).
+- Contrastive Quantum Triplet Loss (QTripletNet).
+- Variational Autoencoder with Quantum Decoder (VAE-QDecoder).
+- Quantum Graph Attention Network (Q-GAT).
+- Quantum Curriculum Learning (QCurriculum).
+- Quantum Ensemble Voting (QEV).
+
 
 ## q_compressor
 ### MODULE: q_compressor
@@ -155,6 +177,13 @@ Large-scale training pipelines may store intermediate activations or optimizer s
 | Dense weight matrices | LSTM enhancer | Handles subtle patterns missed by pure quantum decoders |
 | Quantized embeddings | None | Basic decompression is sufficient |
 | High-noise data | QSVT + LSTM | Mitigates reconstruction errors |
+#### Future Advancements
+- Variational Quantum Feature Extractor (VQFE).
+- Quantum Metric Learning for Latent Alignment.
+- Quantum Attention Filter (QAF).
+- QGAN-based Compressed-to-Full Recovery.
+- Quantum Noise Simulation (QNS) for Robustness.
+
 
 ## q_hpo
 ### MODULE: q_hpo
@@ -182,6 +211,14 @@ With trillion-parameter models, each training run can cost thousands of GPU hour
 | Fine-grained tuning | Classical only | Surrogate model + warm-start | Lower variance but slower exploration |
 | Intermittent access | Partial quantum | Hybrid mode | Balances exploration and cost |
 | Reuse old studies | Any | Warm-start enabled | Leverages prior work |
+#### Future Advancements
+- Q-NAS: Quantum Neural Architecture Search using QAOA + VQC.
+- Quantum Bayesian Optimization (QBO) with Uncertainty-Aware Kernel.
+- Contrastive Loss–Trained Q-VAE for Hyperparameter Embedding.
+- GNN-Based Hyperparameter Graph Embedding.
+- Multi-Fidelity HPO via Quantum Subsampling.
+- Quantum Reinforcement Learning–Based Scheduler for HPO Trials.
+
 
 ## q_nvlink
 ### MODULE: q_nvlink
@@ -205,6 +242,14 @@ On GB200 NVL72 systems, NVLink provides the high-bandwidth backbone between GPUs
 | 8-32 GPUs | QAOA optimizer | Good balance of search and runtime |
 | 32+ GPUs | QAOA + RL planner | Necessary for dynamic heavy loads |
 | Static training cluster | Classifier + RL | Learns stable patterns |
+#### Future Advancements
+- Quantum Walk-Based Congestion Predictor.
+- QAOA-Transformer Hybrid Planner.
+- Quantum LSTM for Temporal NVLink Loads.
+- Quantum Attention Routing Matrix Generator.
+- Contrastive GNN Embedding for Bottleneck Clustering.
+- Quantum Kernel Ridge Regressor for Latency Estimation.
+
 
 ## q_attention
 ### MODULE: q_attention
@@ -230,3 +275,10 @@ Reducing the compute cost of attention layers is essential for trillion-paramete
 | Quantum accelerator available | QAOA sparse + QPE | High throughput with position encoding |
 | CPU-only | Contrastive trainer + Q-SVD | Improves quality without quantum hardware |
 | Training with massive sequences | QPE + Classical trainer | Handles long contexts efficiently |
+#### Future Advancements
+- Quantum Low-Rank Attention (QLRA).
+- Quantum Learned Positional Graph Embedding (QLPGE).
+- Quantum Metric Attention (QMA).
+- Contrastive Quantum Triplet Loss (QTriplet).
+- Adaptive Quantum Memory Routing (AQMR).
+- Multi-Resolution Quantum Attention (MRQA).
