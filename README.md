@@ -327,6 +327,10 @@ HHL circuit decoding KV-attention blocks
 AE + QFT stack for decoder-only inference
 
 Why: Enables efficient forward pass reuse in LLM serving
+<img width="1920" height="1080" alt="Screenshot (139)" src="https://github.com/user-attachments/assets/8af77134-a54d-42c8-85e6-3338b89e5d76" />
+<img width="1920" height="1080" alt="Screenshot (140)" src="https://github.com/user-attachments/assets/19413587-1c7e-4c20-b10a-a8a3fc162715" />
+<img width="1920" height="1080" alt="Screenshot (141)" src="https://github.com/user-attachments/assets/3245e605-b346-453d-a059-60f453482fe9" />
+<img width="1920" height="1080" alt="Screenshot (142)" src="https://github.com/user-attachments/assets/1e2b1e11-f48b-401e-8fe1-1499bb6a1a4e" />
 
 
 ## q_hpo
