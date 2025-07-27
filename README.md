@@ -1,6 +1,6 @@
 # Quantum_nvl
 
-This project contains a lightweight demonstration of quantum-inspired modules for token routing and energy scheduling. It includes simple training utilities and a small FastAPI application.
+This repository showcases quantum-inspired techniques for token routing and energy scheduling. It bundles minimal training utilities, a FastAPI service, and optional quantum modules.
 
 Some modules, such as the Q-NVLinkOpt optimizer, rely on optional quantum
 machine learning libraries. These can be installed using the additional
