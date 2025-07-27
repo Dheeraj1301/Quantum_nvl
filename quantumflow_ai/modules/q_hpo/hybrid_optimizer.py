@@ -26,9 +26,18 @@ class HybridHPO:
 
     def update_surrogate(self, config, loss):
         encoded = self.encode(config)
+
+        if not (np.all(np.isfinite(encoded)) and np.isfinite(loss)):
+            logger.warning("Skipping non-finite data point in surrogate update")
+            return
+
         self.encoded_configs.append(encoded)
         self.losses.append(loss)
-        self.gp.fit(np.array(self.encoded_configs), np.array(self.losses))
+
+        X = np.array(self.encoded_configs)
+        y = np.array(self.losses)
+        mask = np.all(np.isfinite(X), axis=1) & np.isfinite(y)
+        self.gp.fit(X[mask], y[mask])
 
     def optimize(self, steps=10):
         best_config = None
