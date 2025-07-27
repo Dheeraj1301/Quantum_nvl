@@ -94,6 +94,10 @@ button:hover {
   white-space: pre-wrap;
 }
 
+.hidden {
+  display: none;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 2rem;
