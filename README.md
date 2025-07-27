@@ -11,6 +11,33 @@ PennyLane is available so the API can compute the quantum kernel:
 pip install -r quantumflow_ai/qml-requirements.txt
 ```
 
+## Setup
+
+This project has been tested with **Python 3.11**. We recommend creating a
+virtual environment and installing the pinned dependencies from
+`requirements.txt`:
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+The dependency versions are pinned. Key packages include:
+
+```
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+pydantic==2.7.3
+pennylane==0.37.0
+```
+
+Install the optional quantum libraries with:
+
+```bash
+pip install -r quantumflow_ai/qml-requirements.txt
+```
+
 ## Running tests
 
 ```bash
