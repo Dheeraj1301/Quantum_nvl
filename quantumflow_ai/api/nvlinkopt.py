@@ -1,6 +1,10 @@
 from fastapi import APIRouter, UploadFile, File
 import pandas as pd
 import networkx as nx
+try:
+    import torch
+except Exception:  # pragma: no cover - optional dependency missing
+    torch = None
 from quantumflow_ai.modules.q_nvlinkopt.qgnn_hybrid_optimizer import QAOA_GNN_Router
 from quantumflow_ai.modules.q_nvlinkopt.quantum_graph_kernel import QuantumGraphEmbedder
 from quantumflow_ai.modules.q_nvlinkopt.vqaoa_balancer import VQAOABalancer
@@ -40,6 +44,8 @@ async def run_nvlink_optimizers(
 
     if use_rl:
         agent = QuantumRoutingAgent(state_dim=3, action_dim=3)
+        if torch is None:
+            raise RuntimeError("PyTorch is required for RL option")
         dummy_state = torch.rand((1, 3))
         action = agent.select_action(dummy_state)
         output["qrl_action"] = int(action)
