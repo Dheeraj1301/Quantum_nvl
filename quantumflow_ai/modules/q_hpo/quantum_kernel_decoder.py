@@ -26,7 +26,21 @@ class QuantumKernelDecoder:
         self.model = KernelMLP(input_dim=len(config_vectors))
 
     def compute_kernel_matrix(self):
-        return qml.kernels.projected_distance(self.config_vectors, scale=0.5)
+        """Compute a kernel matrix for the provided configuration vectors.
+
+        PennyLane exposes :func:`qml.kernels.projected_distance` for this
+        purpose, but not all environments ship with a version that includes this
+        helper.  When it is unavailable we gracefully fall back to a classical
+        radial basis function kernel so the decoder can still operate.
+        """
+
+        if hasattr(qml, "kernels") and hasattr(qml.kernels, "projected_distance"):
+            return qml.kernels.projected_distance(self.config_vectors, scale=0.5)
+
+        # Fallback: squared Euclidean distances turned into an RBF kernel
+        diff = self.config_vectors[:, None, :] - self.config_vectors[None, :, :]
+        sq_dists = np.sum(diff ** 2, axis=-1)
+        return np.exp(-0.5 * sq_dists)
 
     def train(self, loss_values, epochs=100):
         optimizer = torch.optim.Adam(self.model.parameters(), lr=1e-3)
