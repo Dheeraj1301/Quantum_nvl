@@ -527,3 +527,5 @@ Why: Brings GenAI-quality attention to low-power devices
 <img width="390" height="844" alt="Screenshot (136)" src="https://github.com/user-attachments/assets/06024f5c-fa33-438a-9d4b-06ce6c7d3362" /><br/>
 <img width="390" height="844" alt="Screenshot (137)" src="https://github.com/user-attachments/assets/a6591acd-230b-401f-bb73-11e19b3530b0" /><br/>
 <img width="390" height="844" alt="Screenshot (138)" src="https://github.com/user-attachments/assets/0fed6470-dcb3-40d1-a8d1-6889140ec40f" /><br/>
+
+Thank you for exploring Quantum_nvl!
