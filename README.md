@@ -47,6 +47,7 @@ When the deterministic path is selected without QAOA, the routing module builds 
 At the core of the module lies an Ising model that captures pairwise conflicts between tokens competing for the same expert. The Hamiltonian is formulated as
 
 \[ H(\mathbf{z}) = \sum_{(i,j)} J_{ij} z_i z_j + \sum_i h_i z_i, \]
+![301c60c9-6cb9-4bbf-91d7-f591d404de9a](https://github.com/user-attachments/assets/ab3dfff5-6d16-428d-8c6b-43862d493fc7)
 
 where \( z_i \) denotes whether token \( i \) is assigned to a particular expert, and the couplings \( J_{ij} \) encode congestion penalties. During QAOA execution the circuit starts with a layer of Hadamard gates to create superposition across candidate assignments. Alternating parameterized mixers and cost operators then shape the amplitudes according to the angles \( \gamma \) and \( \beta \). The module uses two layers by default, leading to a parameter vector of size \( 2 \times 2 \times N \), where \( N \) is the number of qubits mapped to experts.
 
