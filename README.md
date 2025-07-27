@@ -84,6 +84,32 @@ Below is a guideline for selecting routing settings. Input size reflects the num
 - Quantum Walk Token Diffusion Over Expert Graph.
 - Contrastive Quantum Metric Routing (CQMR).
 
+#### Niche-Specific Breakdown
+🔁 1. Q-ROUTING
+Core Function: Optimizes data/workload routing using QAOA or LSTM over topology and load constraints.
+
+🔹 Cloud Infrastructure
+Use-case: Data center interconnect routing under fluctuating traffic
+
+Optimizations:
+
+Quantum congestion-aware pathfinding
+
+LSTM-predicted rerouting during spikes
+
+Why: Improves SLA guarantees and energy use in hyperscale networks
+
+🔹 Cybersecurity
+Use-case: Dynamic routing to avoid suspicious subnets or malicious traffic
+
+Optimizations:
+
+Anomaly-aware LSTM pre-filter for routing
+
+Quantum-routing penalty for untrusted paths
+
+Why: Enables adaptive routing under active threats
+
 
 ## q_energy
 ### MODULE: q_energy
@@ -121,6 +147,32 @@ Managing power draw is critical for large GPU clusters running trillion-paramete
 - Quantum Curriculum Learning (QCurriculum).
 - Quantum Ensemble Voting (QEV).
 
+#### Niche-Specific Breakdown
+⚡ 2. Q-ENERGY
+Core Function: Uses QBM/QAOA/meta-learned policies to optimize energy-aware job scheduling.
+
+🔹 Smart Manufacturing
+Use-case: Schedule robotics and compute jobs within real-time power constraints
+
+Optimizations:
+
+Edge-profiled QBM fine-tuned per device
+
+Constraint-aware meta-scheduler
+
+Why: Reduces grid strain, improves system uptime
+
+🔹 Cloud Optimization
+Use-case: Green job allocation across data centers
+
+Optimizations:
+
+Renewable-source-aware QAOA scheduler
+
+GNN energy-graph encoding of jobs
+
+Why: Decarbonizes AI infrastructure, aligns with ESG goals
+
 
 ## q_compressor
 ### MODULE: q_compressor
@@ -150,6 +202,32 @@ In trillion-parameter LLM deployments, model state synchronization is a major ba
 | Real-time gradient sync | Dropout only | Fast but moderate compression |
 | Mixed precision inference | VQC + Dropout | Good space savings with stable quality |
 | CPU-only environment | Denoiser only | Lightweight, purely classical |
+
+#### Niche-Specific Breakdown
+🧠 3. Q-COMPRESSION
+Core Function: Quantum autoencoder + hybrid LSTM/contrastive compression of large-scale ML models or sensor data.
+
+🔹 Generative AI (GenAI)
+Use-case: Compress large language models for memory-bound environments
+
+Optimizations:
+
+GPT-tailored quantum latent filtering
+
+Quantum-Contrastive pretraining
+
+Why: Allows on-device LLMs in memory-constrained edge/phone deployments
+
+🔹 Edge AI / IoT
+Use-case: Compress sensor streams for bandwidth-limited transmission
+
+Optimizations:
+
+Amplitude-embedded AE for noisy signals
+
+Spectrogram-enhanced deep quantization
+
+Why: Transmit critical patterns with minimal loss
 
 ## q_decompressor
 ### MODULE: q_decompressor
@@ -183,6 +261,32 @@ Large-scale training pipelines may store intermediate activations or optimizer s
 - Quantum Attention Filter (QAF).
 - QGAN-based Compressed-to-Full Recovery.
 - Quantum Noise Simulation (QNS) for Robustness.
+
+#### Niche-Specific Breakdown
+🔄 4. Q-DECOMPRESSION
+Core Function: Real-time quantum decompression using QFT, HHL, and variational filters.
+
+🔹 Bioinformatics
+Use-case: Decompress gene sequences or protein folds for analysis
+
+Optimizations:
+
+VQFE-enhanced decompression of biomedical tensors
+
+QSVT for high-fidelity semantic restoration
+
+Why: Recover hidden biological structures from compressed representations
+
+🔹 GenAI (KV-cache Recovery)
+Use-case: Reconstruct hidden transformer states from lossy compression
+
+Optimizations:
+
+HHL circuit decoding KV-attention blocks
+
+AE + QFT stack for decoder-only inference
+
+Why: Enables efficient forward pass reuse in LLM serving
 
 
 ## q_hpo
@@ -219,6 +323,32 @@ With trillion-parameter models, each training run can cost thousands of GPU hour
 - Multi-Fidelity HPO via Quantum Subsampling.
 - Quantum Reinforcement Learning–Based Scheduler for HPO Trials.
 
+#### Niche-Specific Breakdown
+🧪 5. Q-HPO (Hyperparameter Optimization)
+Core Function: QAOA/VQC-based hyperparameter and architecture search.
+
+🔹 GenAI Model Training
+Use-case: Tune LLM/Transformer architecture hyperparameters
+
+Optimizations:
+
+Quantum-guided search for attention heads, layer size, etc.
+
+Reinforcement-trained HPO via circuit reward feedback
+
+Why: Fast and accurate convergence on optimal architectures
+
+🔹 Cybersecurity AI
+Use-case: Optimize models for intrusion detection or malware classification
+
+Optimizations:
+
+QML-optimized search for dropout, feature extractors
+
+Fine-tuned on adversarial noise profiles
+
+Why: Elevates detection accuracy under uncertainty
+
 
 ## q_nvlink
 ### MODULE: q_nvlink
@@ -249,6 +379,32 @@ On GB200 NVL72 systems, NVLink provides the high-bandwidth backbone between GPUs
 - Quantum Attention Routing Matrix Generator.
 - Contrastive GNN Embedding for Bottleneck Clustering.
 - Quantum Kernel Ridge Regressor for Latency Estimation.
+
+#### Niche-Specific Breakdown
+🔗 6. Q-NVLINKOPT
+Core Function: NVLink and interconnect-aware job graph partitioning using QAOA + GNN.
+
+🔹 Cloud AI Training Pipelines
+Use-case: Schedule trillion-parameter model chunks across GPU clusters
+
+Optimizations:
+
+Quantum communication-graph partitioning
+
+GNN job DAG embedding
+
+Why: Reduces memory bottlenecks and training time across GB200-scale clusters
+
+🔹 High-Frequency Trading (HFT)
+Use-case: Route market signal pipelines across ultra-fast GPU clusters
+
+Optimizations:
+
+Real-time QAOA remapping of compute graphs
+
+Volatility-aware graph refinement
+
+Why: Enables low-latency inference pipelines under strict timing
 
 
 ## q_attention
@@ -282,3 +438,29 @@ Reducing the compute cost of attention layers is essential for trillion-paramete
 - Contrastive Quantum Triplet Loss (QTriplet).
 - Adaptive Quantum Memory Routing (AQMR).
 - Multi-Resolution Quantum Attention (MRQA).
+
+#### Niche-Specific Breakdown
+🧬 7. Q-ATTENTION
+Core Function: Quantum-enhanced attention blocks for LLMs, GNNs, and spatial-temporal models.
+
+🔹 GenAI
+Use-case: Quantum transformer block for context-rich sentence generation
+
+Optimizations:
+
+Variational Q-Attention
+
+QFT-enhanced positional encodings
+
+Why: Better context retention, multi-hop reasoning, and generation fidelity
+
+🔹 Edge AI + Smart Cities
+Use-case: Video/event stream attention on edge devices
+
+Optimizations:
+
+Lightweight Q-Attention modules
+
+Quantum-kernelized spatiotemporal embeddings
+
+Why: Brings GenAI-quality attention to low-power devices
