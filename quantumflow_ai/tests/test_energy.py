@@ -1,5 +1,7 @@
 # Auto-generated stub
 # tests/test_energy.py
+import pytest
+pytest.importorskip("sklearn")
 
 from quantumflow_ai.modules.q_energy.qbm_scheduler import qbm_schedule
 from quantumflow_ai.modules.q_energy.classical_scheduler import classical_schedule
