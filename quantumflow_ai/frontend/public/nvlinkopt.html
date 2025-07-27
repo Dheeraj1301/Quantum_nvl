@@ -2,42 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuantumFlow — NVLink Optimizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script defer src="nvlinkopt.js"></script>
+  <script defer src="/app.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>NVLink Communication Optimizer</h1>
+  <aside class="sidebar">
+    <h2>QuantumFlow</h2>
+    <a href="router.html" class="nav-link">Routing</a>
+    <a href="energy.html" class="nav-link">Energy</a>
+    <a href="compressor.html" class="nav-link">Compression</a>
+    <a href="decompressor.html" class="nav-link">Decompression</a>
+    <a href="hpo.html" class="nav-link">HPO</a>
+    <a href="nvlinkopt.html" class="nav-link">NVLink</a>
+    <a href="attention.html" class="nav-link">Q-Attention</a>
+  </aside>
+  <div class="main">
+    <div class="container">
+      <h1>NVLink Communication Optimizer</h1>
 
-    <form id="nvlinkForm">
-      <!-- File upload -->
-      <label for="fileInput">Upload NVLink Graph CSV:</label>
-      <input type="file" id="fileInput" accept=".csv" required />
+      <form id="nvlinkForm">
+        <label for="fileInput">Upload NVLink Graph CSV:</label>
+        <input type="file" id="fileInput" accept=".csv" required />
 
-      <!-- Strategy Checkboxes -->
-      <fieldset class="checkbox-group">
-        <legend>Select Optimization Strategies:</legend>
+        <fieldset class="checkbox-group">
+          <legend>Select Optimization Strategies:</legend>
+          <label><input type="checkbox" id="useQGNN" /> Use QAOA-GNN Hybrid</label>
+          <label><input type="checkbox" id="useKernel" /> Use Quantum Graph Kernel</label>
+          <label><input type="checkbox" id="useVQAOA" /> Use Variational QAOA</label>
+          <label><input type="checkbox" id="useRL" /> Use Quantum Reinforcement Learner</label>
+          <label><input type="checkbox" id="useClassifier" /> Use Quantum Topology Classifier</label>
+        </fieldset>
 
-        <label><input type="checkbox" id="useQGNN" /> Use QAOA-GNN Hybrid</label>
-        <label><input type="checkbox" id="useKernel" /> Use Quantum Graph Kernel</label>
-        <label><input type="checkbox" id="useVQAOA" /> Use Variational QAOA</label>
-        <label><input type="checkbox" id="useRL" /> Use Quantum Reinforcement Learner</label>
-        <label><input type="checkbox" id="useClassifier" /> Use Quantum Topology Classifier</label>
-      </fieldset>
+        <button type="submit">Run Optimization</button>
+      </form>
 
-      <!-- Submit -->
-      <button type="submit">Run Optimization</button>
-    </form>
+      <div id="output" class="output-box"></div>
 
-    <!-- Output -->
-    <div id="output" class="output-box"></div>
-
-    <!-- Back -->
-    <div class="center">
-      <a href="index.html" class="back-link">← Back to module selection</a>
+      <div class="center">
+        <a href="index.html" class="back-link">← Back to module selection</a>
+      </div>
     </div>
   </div>
-
-  <script src="nvlinkopt.js"></script>
 </body>
 </html>
