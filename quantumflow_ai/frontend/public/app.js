@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (text.includes("compression")) module = "compressor";
       else if (text.includes("decompression")) module = "decompressor";
       else if (text.includes("hpo")) module = "hpo";
-      else if (text.includes("nvlink")) module = "nvlinkopt"; // ✅ NEW
+      else if (text.includes("nvlink")) module = "nvlinkopt";
+      else if (text.includes("attention")) module = "attention"; // ✅ NEW
 
       sessionStorage.setItem("lastModule", module);
     });

@@ -8,7 +8,7 @@ from quantumflow_ai.api.decompressor import router as decompressor_router
 from quantumflow_ai.api.hpo import router as hpo_router
 from quantumflow_ai.api.compressor import router as compressor_router
 from quantumflow_ai.api.nvlinkopt import router as nvlinkopt_router  # ✅ Q-NVLinkOpt module
-
+from quantumflow_ai.api.attention import router as q_attention_router
 app = FastAPI()
 
 # ✅ CORS Middleware for cross-domain frontend access
@@ -25,7 +25,8 @@ app.include_router(energy_router)
 app.include_router(decompressor_router)
 app.include_router(hpo_router)
 app.include_router(compressor_router)
-app.include_router(nvlinkopt_router)  # ✅ Added Q-NVLinkOpt endpoint
+app.include_router(nvlinkopt_router)
+app.include_router(q_attention_router)    # ✅ Added Q-NVLinkOpt endpoint
 
 # ✅ Serve frontend (public dashboard/static site)
 app.mount("/", StaticFiles(directory="quantumflow_ai/frontend/public", html=True), name="static")

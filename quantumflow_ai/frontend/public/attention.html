@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QuantumFlow — Q-Attention</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Quantum Attention Module</h1>
+
+    <form id="attentionForm">
+      <!-- Input matrices -->
+      <label for="query">Query Matrix (JSON):</label>
+      <textarea id="query" placeholder="[[0.1, 0.2], [0.3, 0.4]]" rows="4"></textarea>
+
+      <label for="key">Key Matrix (JSON):</label>
+      <textarea id="key" placeholder="..." rows="4"></textarea>
+
+      <label for="value">Value Matrix (JSON):</label>
+      <textarea id="value" placeholder="..." rows="4"></textarea>
+
+      <!-- Options -->
+      <fieldset class="checkbox-group">
+        <legend>Quantum Attention Options</legend>
+
+        <label><input type="checkbox" id="useQuantumKernel" checked /> Use Quantum Kernel Attention (QKA)</label>
+        <label><input type="checkbox" id="useVQC" /> Use VQC Attention Reweighting</label>
+        <label><input type="checkbox" id="useQAOA" /> Use QAOA Sparse Sampling</label>
+        <label><input type="checkbox" id="useQPE" checked /> Use Quantum Positional Encoding</label>
+        <label><input type="checkbox" id="contrastiveTest" /> Run Contrastive Training Check</label>
+      </fieldset>
+
+      <!-- Submit -->
+      <button type="submit">Run Q-Attention</button>
+    </form>
+
+    <!-- Output -->
+    <div id="attentionResult" class="output-box"></div>
+
+    <!-- Back -->
+    <div class="center">
+      <a href="index.html" class="back-link">← Back to module selection</a>
+    </div>
+  </div>
+
+  <script src="attention.js"></script>
+</body>
+</html>
