@@ -1,5 +1,6 @@
-import numpy as np
 import pytest
+np = pytest.importorskip("numpy")
+import numpy as np
 from quantumflow_ai.api.compressor import run_compression, validate_compression_config
 from quantumflow_ai.modules.q_compression.q_autoencoder import (
     QuantumAutoencoder,

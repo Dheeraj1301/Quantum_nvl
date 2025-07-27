@@ -1,4 +1,5 @@
-import networkx as nx
+import pytest
+nx = pytest.importorskip("networkx")
 from quantumflow_ai.modules.q_nvlinkopt.nvlink_graph_optimizer import QAOANVLinkOptimizer
 from quantumflow_ai.modules.q_nvlinkopt.qgnn_hybrid_optimizer import QAOA_GNN_Router
 
