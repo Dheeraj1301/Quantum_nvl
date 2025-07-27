@@ -2,48 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuantumFlow — Q-Attention</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script defer src="attention.js"></script>
+  <script defer src="/app.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Quantum Attention Module</h1>
+  <aside class="sidebar">
+    <h2>QuantumFlow</h2>
+    <a href="router.html" class="nav-link">Routing</a>
+    <a href="energy.html" class="nav-link">Energy</a>
+    <a href="compressor.html" class="nav-link">Compression</a>
+    <a href="decompressor.html" class="nav-link">Decompression</a>
+    <a href="hpo.html" class="nav-link">HPO</a>
+    <a href="nvlinkopt.html" class="nav-link">NVLink</a>
+    <a href="attention.html" class="nav-link">Q-Attention</a>
+  </aside>
+  <div class="main">
+    <div class="container">
+      <h1>Quantum Attention Module</h1>
 
-    <form id="attentionForm">
-      <!-- Input matrices -->
-      <label for="query">Query Matrix (JSON):</label>
-      <textarea id="query" placeholder="[[0.1, 0.2], [0.3, 0.4]]" rows="4"></textarea>
+      <form id="attentionForm">
+        <label for="query">Query Matrix (JSON):</label>
+        <textarea id="query" placeholder="[[0.1, 0.2], [0.3, 0.4]]" rows="4"></textarea>
 
-      <label for="key">Key Matrix (JSON):</label>
-      <textarea id="key" placeholder="..." rows="4"></textarea>
+        <label for="key">Key Matrix (JSON):</label>
+        <textarea id="key" rows="4"></textarea>
 
-      <label for="value">Value Matrix (JSON):</label>
-      <textarea id="value" placeholder="..." rows="4"></textarea>
+        <label for="value">Value Matrix (JSON):</label>
+        <textarea id="value" rows="4"></textarea>
 
-      <!-- Options -->
-      <fieldset class="checkbox-group">
-        <legend>Quantum Attention Options</legend>
+        <fieldset class="checkbox-group">
+          <legend>Quantum Attention Options</legend>
+          <label><input type="checkbox" id="useQuantumKernel" checked /> Use Quantum Kernel Attention (QKA)</label>
+          <label><input type="checkbox" id="useVQC" /> Use VQC Attention Reweighting</label>
+          <label><input type="checkbox" id="useQAOA" /> Use QAOA Sparse Sampling</label>
+          <label><input type="checkbox" id="useQPE" checked /> Use Quantum Positional Encoding</label>
+          <label><input type="checkbox" id="contrastiveTest" /> Run Contrastive Training Check</label>
+        </fieldset>
 
-        <label><input type="checkbox" id="useQuantumKernel" checked /> Use Quantum Kernel Attention (QKA)</label>
-        <label><input type="checkbox" id="useVQC" /> Use VQC Attention Reweighting</label>
-        <label><input type="checkbox" id="useQAOA" /> Use QAOA Sparse Sampling</label>
-        <label><input type="checkbox" id="useQPE" checked /> Use Quantum Positional Encoding</label>
-        <label><input type="checkbox" id="contrastiveTest" /> Run Contrastive Training Check</label>
-      </fieldset>
+        <button type="submit">Run Q-Attention</button>
+      </form>
 
-      <!-- Submit -->
-      <button type="submit">Run Q-Attention</button>
-    </form>
+      <div id="attentionResult" class="output-box"></div>
 
-    <!-- Output -->
-    <div id="attentionResult" class="output-box"></div>
-
-    <!-- Back -->
-    <div class="center">
-      <a href="index.html" class="back-link">← Back to module selection</a>
+      <div class="center">
+        <a href="index.html" class="back-link">← Back to module selection</a>
+      </div>
     </div>
   </div>
-
-  <script src="attention.js"></script>
 </body>
 </html>

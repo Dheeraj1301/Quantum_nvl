@@ -2,85 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuantumFlow Compression</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="compressor.js"></script>
+  <script defer src="/app.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Q-Compression Module</h1>
+  <aside class="sidebar">
+    <h2>QuantumFlow</h2>
+    <a href="router.html" class="nav-link">Routing</a>
+    <a href="energy.html" class="nav-link">Energy</a>
+    <a href="compressor.html" class="nav-link">Compression</a>
+    <a href="decompressor.html" class="nav-link">Decompression</a>
+    <a href="hpo.html" class="nav-link">HPO</a>
+    <a href="nvlinkopt.html" class="nav-link">NVLink</a>
+    <a href="attention.html" class="nav-link">Q-Attention</a>
+  </aside>
+  <div class="main">
+    <div class="container">
+      <h1>Q-Compression Module</h1>
 
-    <form id="compressForm">
-      <!-- File Upload -->
-      <label for="fileInput">Upload CSV File:</label>
-      <input type="file" id="fileInput" accept=".csv" required />
+      <form id="compressForm">
+        <label for="fileInput">Upload CSV File:</label>
+        <input type="file" id="fileInput" accept=".csv" required />
 
-      <!-- Quantum Compression -->
-      <label>
-        <input type="checkbox" id="quantumToggle" checked />
-        Use Quantum Compression
-      </label>
+        <label>
+          <input type="checkbox" id="quantumToggle" checked />
+          Use Quantum Compression
+        </label>
 
-      <!-- Noise Injection -->
-      <label>
-        <input type="checkbox" id="noiseToggle" />
-        Inject Noise
-      </label>
+        <label>
+          <input type="checkbox" id="noiseToggle" />
+          Inject Noise
+        </label>
 
-      <!-- Noise Level -->
-      <label for="noiseLevel">Noise Level:</label>
-      <input type="range" id="noiseLevel" min="0" max="0.3" step="0.01" value="0" oninput="document.getElementById('noiseValue').textContent = this.value" />
-      <span id="noiseValue" style="color: #aaffaa;">0</span>
+        <label for="noiseLevel">Noise Level:</label>
+        <input type="range" id="noiseLevel" min="0" max="0.3" step="0.01" value="0" oninput="document.getElementById('noiseValue').textContent = this.value" />
+        <span id="noiseValue" style="color: #aaffaa;">0</span>
 
-      <!-- Dropout -->
-      <label>
-        <input type="checkbox" id="dropoutToggle" />
-        Use Quantum Dropout
-      </label>
+        <label>
+          <input type="checkbox" id="dropoutToggle" />
+          Use Quantum Dropout
+        </label>
 
-      <!-- Dropout Probability -->
-      <label for="dropoutProb">Dropout Probability:</label>
-      <input type="range" id="dropoutProb" min="0" max="1" step="0.1" value="0" oninput="document.getElementById('dropoutValue').textContent = this.value" />
-      <span id="dropoutValue" style="color: #aaffaa;">0</span>
+        <label for="dropoutProb">Dropout Probability:</label>
+        <input type="range" id="dropoutProb" min="0" max="1" step="0.1" value="0" oninput="document.getElementById('dropoutValue').textContent = this.value" />
+        <span id="dropoutValue" style="color: #aaffaa;">0</span>
 
-      <!-- Denoiser -->
-      <label>
-        <input type="checkbox" id="predictToggle" />
-        Predict Compressibility First
-      </label>
+        <label>
+          <input type="checkbox" id="predictToggle" />
+          Predict Compressibility First
+        </label>
 
-      <label>
-        <input type="checkbox" id="denoiseToggle" />
-        Denoise Latent Output
-      </label>
+        <label>
+          <input type="checkbox" id="denoiseToggle" />
+          Denoise Latent Output
+        </label>
 
-      <label>
-        <input type="checkbox" id="pruneToggle" />
-        Enable Qubit Pruning
-      </label>
+        <label>
+          <input type="checkbox" id="pruneToggle" />
+          Enable Qubit Pruning
+        </label>
 
-      <label for="noiseLevel">Noise Level:</label>
-      <input type="range" id="noiseLevel" min="0" max="0.3" step="0.01" value="0" oninput="noiseValue.textContent = this.value" />
-      <span id="noiseValue" style="color: #aaffaa;">0</span>
+        <button type="submit">Compress</button>
+      </form>
 
-      <label>
-        <input type="checkbox" id="dropoutToggle" />
-        Use Dropout
-      </label>
+      <div id="output" class="output-box"></div>
 
-      <label for="dropoutProb">Dropout Prob:</label>
-      <input type="range" id="dropoutProb" min="0" max="1" step="0.05" value="0" oninput="dropoutValue.textContent = this.value" />
-      <span id="dropoutValue" style="color: #aaffaa;">0</span>
-
-      <button type="submit">Compress</button>
-    </form>
-
-    <!-- JSON Output -->
-    <div id="output" class="output-box"></div>
-
-    <!-- Navigation -->
-    <div class="center">
-      <a href="index.html" class="back-link">← Back to module selection</a>
+      <div class="center">
+        <a href="index.html" class="back-link">← Back to module selection</a>
+      </div>
     </div>
   </div>
 </body>

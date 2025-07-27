@@ -1,83 +1,39 @@
-<!-- quantumflow_ai/frontend/public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QuantumFlow - Module Select</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuantumFlow AI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="/app.js"></script>
-  <style>
-    body {
-      background-color: #000;
-      color: #0f0;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .container {
-      background-color: #111;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 20px rgba(0,255,0,0.2);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      color: #66ff99;
-    }
-
-    .subtitle {
-      margin-bottom: 1.5rem;
-      color: #99ffcc;
-    }
-
-    .button-row {
-      display: flex;
-      flex-direction: column; /* ✅ vertical */
-      gap: 0.75rem;
-    }
-
-    button {
-      background-color: #00ff88;
-      color: #000;
-      font-weight: bold;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #33ffaa;
-    }
-  </style>
 </head>
 <body>
-  <!-- quantumflow_ai/frontend/public/index.html -->
-
-<!-- ... head remains unchanged ... -->
-
-<div class="container center">
-  <h1>QuantumFlow AI Dashboard</h1>
-  <p class="subtitle">Select a module to begin:</p>
-  <div class="button-row">
-    <button onclick="location.href='router.html'">Q-Routing</button>
-    <button onclick="location.href='energy.html'">Q-Energy</button>
-    <button onclick="location.href='compressor.html'">Q-Compression</button>
-    <button onclick="location.href='decompressor.html'">Q-Decompression</button>
-    <button onclick="location.href='hpo.html'">Q-HPO</button>
-    <button onclick="location.href='nvlinkopt.html'">Q-NVLinkOpt</button>
-    <button onclick="location.href='attention.html'">Q-Attention</button> <!-- ✅ NEW -->
+  <aside class="sidebar">
+    <h2>QuantumFlow</h2>
+    <a href="router.html" class="nav-link">Routing</a>
+    <a href="energy.html" class="nav-link">Energy</a>
+    <a href="compressor.html" class="nav-link">Compression</a>
+    <a href="decompressor.html" class="nav-link">Decompression</a>
+    <a href="hpo.html" class="nav-link">HPO</a>
+    <a href="nvlinkopt.html" class="nav-link">NVLink</a>
+    <a href="attention.html" class="nav-link">Q-Attention</a>
+  </aside>
+  <div class="main">
+    <div class="container center">
+      <h1>QuantumFlow AI Dashboard</h1>
+      <p class="subtitle">Select a module to begin:</p>
+      <div class="button-row">
+        <button onclick="location.href='router.html'">Q-Routing</button>
+        <button onclick="location.href='energy.html'">Q-Energy</button>
+        <button onclick="location.href='compressor.html'">Q-Compression</button>
+        <button onclick="location.href='decompressor.html'">Q-Decompression</button>
+        <button onclick="location.href='hpo.html'">Q-HPO</button>
+        <button onclick="location.href='nvlinkopt.html'">Q-NVLinkOpt</button>
+        <button onclick="location.href='attention.html'">Q-Attention</button>
+      </div>
+    </div>
   </div>
-</div>
 </body>
 </html>

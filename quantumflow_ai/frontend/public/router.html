@@ -2,53 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuantumFlow Routing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="router.js"></script>
+  <script defer src="/app.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Quantum Routing Interface</h1>
+  <aside class="sidebar">
+    <h2>QuantumFlow</h2>
+    <a href="router.html" class="nav-link">Routing</a>
+    <a href="energy.html" class="nav-link">Energy</a>
+    <a href="compressor.html" class="nav-link">Compression</a>
+    <a href="decompressor.html" class="nav-link">Decompression</a>
+    <a href="hpo.html" class="nav-link">HPO</a>
+    <a href="nvlinkopt.html" class="nav-link">NVLink</a>
+    <a href="attention.html" class="nav-link">Q-Attention</a>
+  </aside>
+  <div class="main">
+    <div class="container">
+      <h1>Quantum Routing Interface</h1>
 
-    <form id="routingForm">
-      <label for="experts">Expert IDs (comma-separated):</label>
-      <input type="text" id="experts" placeholder="0,1,2" required />
+      <form id="routingForm">
+        <label for="experts">Expert IDs (comma-separated):</label>
+        <input type="text" id="experts" placeholder="0,1,2" required />
 
-      <label for="tokens">Token IDs (comma-separated):</label>
-      <input type="text" id="tokens" placeholder="0,1,2,3" required />
+        <label for="tokens">Token IDs (comma-separated):</label>
+        <input type="text" id="tokens" placeholder="0,1,2,3" required />
 
-      <label>
-        <input type="checkbox" id="useQuantum" checked />
-        Use Quantum Routing
-      </label>
+        <label>
+          <input type="checkbox" id="useQuantum" checked />
+          Use Quantum Routing
+        </label>
 
-      <label>
-        <input type="checkbox" id="useML" />
-        Use ML-based Routing
-      </label>
+        <label>
+          <input type="checkbox" id="useML" />
+          Use ML-based Routing
+        </label>
 
-      <button type="submit">Run Routing</button>
-    </form>
+        <button type="submit">Run Routing</button>
+      </form>
 
-    <form id="fileForm">
-      <label for="csvFile">Upload CSV File:</label>
-      <input type="file" id="csvFile" accept=".csv" required />
+      <form id="fileForm">
+        <label for="csvFile">Upload CSV File:</label>
+        <input type="file" id="csvFile" accept=".csv" required />
 
-      <label>
-        <input type="checkbox" id="useQuantumFile" checked />
-        Use Quantum Routing
-      </label>
+        <label>
+          <input type="checkbox" id="useQuantumFile" checked />
+          Use Quantum Routing
+        </label>
 
-      <button type="submit">Upload & Route</button>
-    </form>
+        <button type="submit">Upload & Route</button>
+      </form>
 
-    <button id="suggestButton" type="button">Get LSTM Suggestion</button>
+      <button id="suggestButton" type="button">Get LSTM Suggestion</button>
 
-    <div id="suggestion" class="output-box"></div>
-    <div id="output" class="output-box"></div>
+      <div id="suggestion" class="output-box"></div>
+      <div id="output" class="output-box"></div>
 
-    <div class="center">
-      <a href="index.html" class="back-link">← Back to module selection</a>
+      <div class="center">
+        <a href="index.html" class="back-link">← Back to module selection</a>
+      </div>
     </div>
   </div>
 </body>

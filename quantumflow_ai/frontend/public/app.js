@@ -26,4 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionStorage.setItem("lastModule", module);
     });
   });
+
+  const page = location.pathname.split("/").pop();
+  document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.getAttribute("href") === page) {
+      link.classList.add("active");
+    }
+  });
 });
