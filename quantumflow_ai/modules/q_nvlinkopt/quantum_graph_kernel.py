@@ -35,6 +35,11 @@ class QuantumGraphEmbedder:
     def embed_graphs(self, graph_list: List["nx.Graph"]) -> np.ndarray:
         vectors = np.array([self._extract_features(g) for g in graph_list])
         kernel_matrix = self._kernel_matrix(vectors)
+        max_components = min(self.pca.n_components, kernel_matrix.shape[0])
+        if max_components < 1:
+            max_components = 1
+        if max_components != self.pca.n_components:
+            self.pca = PCA(n_components=max_components)
         return self.pca.fit_transform(kernel_matrix)
 
     def _extract_features(self, g) -> np.ndarray:
